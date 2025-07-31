@@ -47,49 +47,66 @@ class LscNpzDataset(Dataset):
     def get_name(self, full_name=False):
         return "lsc_npz"  # or whatever label you want to appear in logs
 
-    def __getitem__(self, idx):
-        idx = self.indices[idx]
-        input_files = self.file_list[idx : idx + self.n_steps]
-        target_file = self.file_list[idx + self.n_steps]
-
-        # Fields to use as input/output channels
+    def __getitem__(self, idx: int):
         selected_fields = [
-                           'pressure_throw', 'density_throw', 'temperature_throw',
-                           'density_case', 'pressure_case', 'temperature_case',
-                           'Uvelocity', 'Wvelocity'
-                          ]
+            'pressure_throw', 'density_throw', 'temperature_throw',
+            'density_case', 'pressure_case', 'temperature_case',
+            'Uvelocity', 'Wvelocity'
+        ]
 
         def load_tensor(fpath):
-            with np.load(fpath) as data:
-                arrays = []
-                for key in selected_fields:
-                    if key in data:
+            if not fpath.endswith(".npz"):
+                print(f"[SKIP] Skipping non-npz file: {fpath}")
+                return None
+            try:
+                with np.load(fpath) as data:
+                    arrays = []
+                    for key in selected_fields:
+                        if key not in data:
+                            print(f"[SKIP] Missing key {key} in {fpath}")
+                            return None
                         arr = data[key]
-                        try:
-                            arr = arr.astype(np.float32)
-                        except Exception as e:
-                            raise ValueError(f"Could not convert {key} in {fpath} to float32: {e}")
+                        arr = np.nan_to_num(arr, nan=0.0, posinf=0.0, neginf=0.0)
+                        arr = arr.astype(np.float32)
+                        if arr.ndim != 2:
+                            print(f"[SKIP] {key} in {fpath} is not 2D")
+                            return None
+                        arrays.append(arr)
+                    stacked = np.stack(arrays, axis=0)[:, :560, :192]
+                    return torch.tensor(stacked, dtype=torch.float32)
+            except Exception as e:
+                print(f"[SKIP] Failed to load {fpath}: {e}")
+                return None
 
-                        if arr.ndim == 2:
-                            arrays.append(arr)
-                        else:
-                            raise ValueError(f"{key} in {fpath} is not 2D")
-                    else:
-                        raise KeyError(f"{key} missing in {fpath}")
-                #stacked = np.stack(arrays, axis=0)  # shape: [C, H, W]
-                stacked = np.stack(arrays, axis=0)[:, :560, :192]
+        # Now handle retry logic
+        max_retries = 5
+        attempt = 0
+        while attempt < max_retries:
+            true_idx = self.indices[idx]
+            input_files = self.file_list[true_idx : true_idx + self.n_steps]
+            target_file = self.file_list[true_idx + self.n_steps]
 
-            return torch.tensor(stacked, dtype=torch.float32)
+            input_tensors = []
+            for f in input_files:
+                t = load_tensor(os.path.join(self.root_dir, f))
+                if t is None:
+                    print(f"[SKIP] Bad input file in sequence {input_files}. Retrying...")
+                    idx = (idx + 1) % len(self)
+                    attempt += 1
+                    break
+                input_tensors.append(t)
+            else:
+                x = torch.stack(input_tensors, dim=0)
+                y = load_tensor(os.path.join(self.root_dir, target_file))
+                if y is None:
+                    print(f"[SKIP] Bad target file {target_file}. Retrying...")
+                    idx = (idx + 1) % len(self)
+                    attempt += 1
+                    continue
+                bcs = torch.zeros(2)
+                return x, bcs, y
 
-        # Load input sequence
-        input_tensors = [load_tensor(os.path.join(self.root_dir, f)) for f in input_files]
-        x = torch.stack(input_tensors, dim=0)  # shape: [T, C, H, W]
-
-        # Load target
-        y = load_tensor(os.path.join(self.root_dir, target_file))  # shape: [C, H, W]
-        bcs = torch.zeros(2)  # placeholder
-
-        return x, bcs, y
+        raise RuntimeError(f"[ERROR] Too many failed attempts at idx={idx}")
 
     @staticmethod
     def _specifics():
@@ -114,4 +131,7 @@ class LscNpzDataset(Dataset):
     def get_per_file_dsets(self):
         # No sub-files — treat whole dataset as one logical file
         return [self]
+
+
+
 
