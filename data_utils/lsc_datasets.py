@@ -6,9 +6,30 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset
 
+IMAGE_WIDTH_HALF_IMAGE = 560
+IMAGE_WIDTH_FULL_IMAGE = 1120
+
+PATCH_SIZE = 16
+IMAGE_HEIGHT_RAW = 400
+IMAGE_HEIGHT_CROPPED = (IMAGE_HEIGHT_RAW // PATCH_SIZE) * PATCH_SIZE
+IMAGE_HEIGHT_PADDED  = ((IMAGE_HEIGHT_RAW // PATCH_SIZE) + 1) * PATCH_SIZE
+
+IMAGE_WIDTH = IMAGE_WIDTH_HALF_IMAGE
+IMAGE_WIDTH = IMAGE_WIDTH_FULL_IMAGE
+
+IMAGE_HEIGHT = IMAGE_HEIGHT_PADDED
+IMAGE_HEIGHT = IMAGE_HEIGHT_CROPPED
+
 class LscNpzDataset(Dataset):
-    def __init__(self, path, include_string='', n_steps=5, dt=1, split='train',
-                 train_val_test=(0.8, 0.1, 0.1), subname=None, extra_specific=False):
+    def __init__(self,
+                 path,
+                 include_string='',
+                 n_steps=5,
+                 dt=1,
+                 split='train',
+                 train_val_test=(0.8, 0.1, 0.1),
+                 subname=None,
+                 extra_specific=False):
 
         self.root_dir = path
         self.n_steps = n_steps
@@ -55,6 +76,72 @@ class LscNpzDataset(Dataset):
         ]
 
         def load_tensor(fpath):
+            try:
+                with np.load(fpath) as data:
+                    arrays = []
+                    for key in selected_fields:
+                        if key not in data:
+                            print(f"[SKIP] Missing key {key} in {fpath}")
+                            return None
+                        arr = data[key]
+                        arr = np.nan_to_num(arr, nan=0.0, posinf=0.0, neginf=0.0)
+                        arr = arr.astype(np.float32)
+                        if arr.ndim != 2:
+                            print(f"[SKIP] {key} in {fpath} is not 2D")
+                            return None
+                        arrays.append(arr)
+                    stacked = np.stack(arrays, axis=0)[:, :IMAGE_WIDTH, :IMAGE_HEIGHT]
+                    return torch.tensor(stacked, dtype=torch.float32)
+            except Exception as e:
+                print(f"[SKIP] Failed to load {fpath}: {e}")
+                return None
+
+        max_retries = 5
+        attempt = 0
+        failed_paths = set()
+
+        while attempt < max_retries:
+            true_idx = self.indices[idx]
+            input_files = self.file_list[true_idx : true_idx + self.n_steps]
+            target_file = self.file_list[true_idx + self.n_steps]
+
+            input_tensors = []
+            for f in input_files:
+                fpath = os.path.join(self.root_dir, f)
+                t = load_tensor(fpath)
+                if t is None:
+                    failed_paths.add(fpath)
+                    idx = (idx + 1) % len(self)
+                    attempt += 1
+                    break
+                input_tensors.append(t)
+            else:
+                y_path = os.path.join(self.root_dir, target_file)
+                y = load_tensor(y_path)
+                if y is None:
+                    failed_paths.add(y_path)
+                    idx = (idx + 1) % len(self)
+                    attempt += 1
+                    continue
+                bcs = torch.zeros(2)
+
+                return torch.stack(input_tensors, dim=0).float(), bcs.float(), y.float()
+                #return torch.stack(input_tensors, dim=0), bcs, y
+
+        print(f"[SKIP] Too many failed attempts at idx={idx}. Failed files:")
+        for p in sorted(failed_paths):
+            print(f" - {p}")
+        raise IndexError(f"Skipping idx={idx} after {max_retries} failures.")
+
+    '''
+    def __getitem__(self, idx: int):
+        selected_fields = [
+            'pressure_throw', 'density_throw', 'temperature_throw',
+            'density_case', 'pressure_case', 'temperature_case',
+            'Uvelocity', 'Wvelocity'
+        ]
+
+        def load_tensor(fpath):
             if not fpath.endswith(".npz"):
                 print(f"[SKIP] Skipping non-npz file: {fpath}")
                 return None
@@ -72,7 +159,7 @@ class LscNpzDataset(Dataset):
                             print(f"[SKIP] {key} in {fpath} is not 2D")
                             return None
                         arrays.append(arr)
-                    stacked = np.stack(arrays, axis=0)[:, :560, :192]
+                    stacked = np.stack(arrays, axis=0)[:, :IMAGE_WIDTH, :IMAGE_HEIGHT]
                     return torch.tensor(stacked, dtype=torch.float32)
             except Exception as e:
                 print(f"[SKIP] Failed to load {fpath}: {e}")
@@ -107,6 +194,7 @@ class LscNpzDataset(Dataset):
                 return x, bcs, y
 
         raise RuntimeError(f"[ERROR] Too many failed attempts at idx={idx}")
+    '''
 
     @staticmethod
     def _specifics():

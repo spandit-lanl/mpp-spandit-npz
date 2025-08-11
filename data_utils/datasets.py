@@ -131,10 +131,22 @@ class MixedDataset(Dataset):
         local_idx = index - max(self.offsets[file_idx], 0)
         try:
             x, bcs, y = self.sub_dsets[file_idx][local_idx]
-        except:
-            print('FAILED AT ', file_idx, local_idx, index,int(os.environ.get("RANK", 0)))
-            thisvariabledoesntexist
-        return x, file_idx, torch.tensor(self.subset_dict[self.sub_dsets[file_idx].get_name()]), bcs, y
+        except IndexError as e:
+            print(f"[SKIP] IndexError in MixedDataset at index={index}: {e}")
+            # Return dummy tensors instead of raising
+            dummy_x = torch.zeros((self.sub_dsets[file_idx].n_steps, 8, 560, 192))  # Replace 8 with num_fields
+            dummy_bcs = torch.zeros(2)
+            dummy_y = torch.zeros((8, 560, 192))  # Replace 8 with num_fields
+            subset_tensor = torch.tensor(self.subset_dict[self.sub_dsets[file_idx].get_name()])
+            return dummy_x, file_idx, subset_tensor, dummy_bcs, dummy_y
+
+        except Exception as e:
+            print(f"[SKIP] Unexpected error at index={index}: {e}")
+            raise IndexError(f"Skipping index={index} due to dataset error")
+        #except:
+        #    print('FAILED AT ', file_idx, local_idx, index,int(os.environ.get("RANK", 0)))
+        #    thisvariabledoesntexist
+        return x.float(), file_idx, torch.tensor(self.subset_dict[self.sub_dsets[file_idx].get_name()]), bcs.float(), y.float()
 
     def __len__(self):
         return sum([len(dset) for dset in self.sub_dsets])

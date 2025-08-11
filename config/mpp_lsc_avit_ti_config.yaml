@@ -10,7 +10,7 @@ basic_config: &basic_config
   enable_amp: !!bool False # Use automatic mixed precision - blows up with low variance fields right now
   compile: !!bool False # Compile model - Does not currently work
   gradient_checkpointing: !!bool False # Whether to use gradient checkpointing - Slow, but lower memory
-  exp_dir: '/users/spandit/mpp/mpp-runs' # Output path
+  exp_dir: '/users/spandit/proj/runs/mpp' # Output path
   log_interval: 1 # How often to log - Don't think this is actually implemented
   pretrained: !!bool False # Whether to load a pretrained model
   # wandb settings
@@ -20,7 +20,7 @@ basic_config: &basic_config
   # Training settings
   drop_path: 0.1
   batch_size: 1
-  max_epochs: 5
+  max_epochs: 500
   scheduler_epochs: -1
   epoch_size: 2000 # Artificial epoch size
   rescale_gradients: !!bool False # Activate hook that scales block gradients to norm 1
@@ -30,9 +30,9 @@ basic_config: &basic_config
   learning_rate: -1 # -1 means use DAdapt
   weight_decay: 1e-3
   n_states: 8   # Number of state variables across the datasets - Can be larger than real number and things will just go unused
-  state_names: ['Pressure', 'Vx', 'Vy', 'Density',  'Vx', 'Vy', 'Density', 'Pressure'] # Should be sorted
+  state_names: ['Uvelocity', 'Wvelocity', 'density_case', 'density_throw', 'pressure_case', 'pressure_throw', 'temperature_case', 'temperature_throw'] # Should be sorted
   dt: 1 # Striding of data - Not currently implemented > 1
-  n_steps: 16 # Length of history to include in input
+  n_steps: 2 # Length of history to include in input
   enforce_max_steps: !!bool False # If false and n_steps > dataset steps, use dataset steps. Otherwise, raise Exception.
   accum_grad: 5  # Real batch size is accum * batch_size, real steps/"epoch" is epoch_size / accum
   # Model settings
@@ -54,10 +54,10 @@ basic_config: &basic_config
   extended_names: !!bool False # Whether to use extended names - not currently implemented
   embedding_offset: 0  # Use when adding extra finetuning fields
   train_data_paths: [
-              ['/lustre/scratch5/exempt/artimis/data/lsc240420_fp16_half', 'lsc_npz', ''],
+              ['/lustre/scratch5/exempt/artimis/data/lsc240420', 'lsc_npz', ''],
               ]
   valid_data_paths: [
-              ['/lustre/scratch5/exempt/artimis/data/lsc240420_fp16_half', 'lsc_npz', ''],
+              ['/lustre/scratch5/exempt/artimis/data/lsc240420', 'lsc_npz', ''],
               ]
   append_datasets: [] # List of datasets to append to the input/output projections for finetuning
 

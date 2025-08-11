@@ -229,6 +229,12 @@ class Trainer:
         for batch_idx, data in enumerate(self.train_data_loader):
             steps += 1
             inp, file_index, field_labels, bcs, tar = map(lambda x: x.to(self.device), data)
+
+            # Sanity check: ensure all tensors are float32
+            assert inp.dtype == torch.float32, f"DEBUG:Input tensor dtype is {inp.dtype}, expected torch.float32"
+            assert bcs.dtype == torch.float32, f"DEBUG: BC tensor dtype is {bcs.dtype}, expected torch.float32"
+            assert tar.dtype == torch.float32, f"DEBUG: Target tensor dtype is {tar.dtype}, expected torch.float32"
+
             dset_type = self.train_dataset.sub_dsets[file_index[0]].type
             loss_counts[dset_type] += 1
             inp = rearrange(inp, 'b t c h w -> t b c h w')
