@@ -70,9 +70,7 @@ class LscNpzDataset(Dataset):
 
     def __getitem__(self, idx: int):
         selected_fields = [
-            'pressure_throw', 'density_throw', 'temperature_throw',
-            'density_case', 'pressure_case', 'temperature_case',
-            'Uvelocity', 'Wvelocity'
+            'Uvelocity', 'Wvelocity', 'density_case', 'density_cushion', 'density_maincharge', 'density_outside_air', 'density_striker', 'density_throw'
         ]
 
         def load_tensor(fpath):
@@ -82,6 +80,7 @@ class LscNpzDataset(Dataset):
                     for key in selected_fields:
                         if key not in data:
                             print(f"[SKIP] Missing key {key} in {fpath}")
+                            raise KeyError(f"Missing field '{key}' in file {fpath}")
                             return None
                         arr = data[key]
                         arr = np.nan_to_num(arr, nan=0.0, posinf=0.0, neginf=0.0)
@@ -136,9 +135,7 @@ class LscNpzDataset(Dataset):
     '''
     def __getitem__(self, idx: int):
         selected_fields = [
-            'pressure_throw', 'density_throw', 'temperature_throw',
-            'density_case', 'pressure_case', 'temperature_case',
-            'Uvelocity', 'Wvelocity'
+            'Uvelocity', 'Wvelocity', 'density_case', 'density_cushion', 'density_maincharge', 'density_outside_air', 'density_striker', 'density_throw'
         ]
 
         def load_tensor(fpath):
@@ -201,9 +198,7 @@ class LscNpzDataset(Dataset):
         time_index = 0
         sample_index = None
         field_names = [
-            'pressure_throw', 'density_throw', 'temperature_throw',
-            'density_case', 'pressure_case', 'temperature_case',
-            'Uvelocity', 'Wvelocity'
+            'Uvelocity', 'Wvelocity', 'density_case', 'density_cushion', 'density_maincharge', 'density_outside_air', 'density_striker', 'density_throw'
         ]
         type = 'lsc_npz'
         split_level = 'sample'

@@ -17,9 +17,7 @@ from utils.YParams import YParams
 NPZ_DIR = '/lustre/scratch5/exempt/artimis/data/lsc240420/'
 
 SELECTED_FIELDS = [
-    'pressure_throw', 'density_throw', 'temperature_throw',
-    'density_case', 'pressure_case', 'temperature_case',
-    'Uvelocity', 'Wvelocity'
+    'Uvelocity', 'Wvelocity', 'density_case', 'density_cushion', 'density_maincharge', 'density_outerair', 'density_striker', 'density_throw'
 ]
 # CLI Arguments
 # -------------------------------
