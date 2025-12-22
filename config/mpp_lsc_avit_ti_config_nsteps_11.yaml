@@ -32,7 +32,7 @@ basic_config: &basic_config
   n_states: 8   # Number of state variables across the datasets - Can be larger than real number and things will just go unused
   state_names: ['Uvelocity', 'Wvelocity', 'density_case', 'density_cushion', 'density_maincharge', 'density_outside_air', 'density_striker', 'density_throw'] # Should be sorted
   dt: 1 # Striding of data - Not currently implemented > 1
-  n_steps: 12 # Length of history to include in input
+  n_steps: 11 # Length of history to include in input
   enforce_max_steps: !!bool False # If false and n_steps > dataset steps, use dataset steps. Otherwise, raise Exception.
   accum_grad: 5  # Real batch size is accum * batch_size, real steps/"epoch" is epoch_size / accum
   # Model settings
