@@ -111,5 +111,5 @@ axes[1].grid(True)
 # -------- Save and show --------
 plt.tight_layout()
 plt.savefig(f"{plot_name}", dpi=300)
-plt.show()
+#plt.show()
 
