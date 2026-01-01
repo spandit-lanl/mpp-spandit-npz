@@ -52,7 +52,7 @@ FINETUNE_DATA='SWE'
 if [ "$PREFIX_MODE" = "pretrain" ]; then
   RUN_PREFIX="train_${TRAIN_DATA}"
 else
-  RUN_PREFIX="train_{TRAIN_DATA}_finetune_{FINETUNE_DATA}"
+  RUN_PREFIX="train_${TRAIN_DATA}_finetune_${FINETUNE_DATA}"
 fi
 
 OUT_DIR="./OUT_${TRAIN_DATA}/${RUN_PREFIX}"

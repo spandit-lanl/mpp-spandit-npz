@@ -52,7 +52,7 @@ FINETUNE_DATA='LSC'
 if [ "$PREFIX_MODE" = "pretrain" ]; then
   RUN_PREFIX="train_${TRAIN_DATA}"
 else
-  RUN_PREFIX="train_{TRAIN_DATA}_finetune_{FINETUNE_DATA}"
+  RUN_PREFIX="train_${TRAIN_DATA}_finetune_${FINETUNE_DATA}"
 fi
 
 OUT_DIR="./OUT_${TRAIN_DATA}/${RUN_PREFIX}"
@@ -64,9 +64,9 @@ fi
 ############################################################
 # Run Training
 ############################################################
-python train_basic.py                                                           \
+echo "python train_basic.py                                                           \
   --run_name ${RUN_PREFIX}_nsteps_${NSTEPS}                                     \
   --config basic_config                                                         \
   --yaml_config config/config_${TRAIN_DATA}/mpp_avit_ti_config_nsteps_${NSTEPS}.yaml \
   &>> ${OUT_DIR}/out_${RUN_PREFIX}_nsteps_${NSTEPS}.txt
-
+"
