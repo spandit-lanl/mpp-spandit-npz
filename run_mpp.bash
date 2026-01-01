@@ -64,9 +64,9 @@ fi
 ############################################################
 # Run Training
 ############################################################
-echo "python train_basic.py                                                           \
+python train_basic.py                                                           \
   --run_name ${RUN_PREFIX}_nsteps_${NSTEPS}                                     \
   --config basic_config                                                         \
   --yaml_config config/config_${TRAIN_DATA}/mpp_avit_ti_config_nsteps_${NSTEPS}.yaml \
   &>> ${OUT_DIR}/out_${RUN_PREFIX}_nsteps_${NSTEPS}.txt
-"
+
