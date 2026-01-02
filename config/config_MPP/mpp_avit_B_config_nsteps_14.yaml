@@ -32,7 +32,7 @@ basic_config: &basic_config
   n_states: 12   # Number of state variables across the datasets - Can be larger than real number and things will just go unused
   state_names: ['Pressure', 'Vx', 'Vy', 'Density',  'Vx', 'Vy', 'Density', 'Pressure'] # Should be sorted
   dt: 1 # Striding of data - Not currently implemented > 1
-  n_steps: 2 # Length of history to include in input
+  n_steps: 14 # Length of history to include in input
   enforce_max_steps: !!bool False # If false and n_steps > dataset steps, use dataset steps. Otherwise, raise Exception.
   accum_grad: 5  # Real batch size is accum * batch_size, real steps/"epoch" is epoch_size / accum
   # Model settings
@@ -41,8 +41,8 @@ basic_config: &basic_config
   time_type: 'attention' # Conditional on block type
   space_type: 'axial_attention' # Conditional on block type
   tie_fields: !!bool False # Whether to use 1 embedding per field per data
-  embed_dim: 192 # Dimension of internal representation - 192/384/768/1024 for Ti/S/B/L
-  num_heads: 3 # Number of heads for attention - 3/6/12/16 for Ti/S/B/L
+  embed_dim: 768 # Dimension of internal representation - 192/384/768/1024 for Ti/S/B/L
+  num_heads: 12 # Number of heads for attention - 3/6/12/16 for Ti/S/B/L
   processor_blocks: 12 # Number of transformer blocks in the backbone - 12/12/12/24 for Ti/S/B/L
   patch_size: [16, 16] # Actually currently hardcoded at 16
   bias_type: 'rel'  # Options rel, continuous, none
@@ -73,7 +73,7 @@ finetune: &finetune
   accum_grad: 1
   pretrained: !!bool True
   group: 'debugging'
-  pretrained_ckpt_path: '/users/spandit/myscratch/runs-ch/mpp-runs/MPP/basic_config/train_MPP_nsteps_02/training_checkpoints/ckpt.tar'
+  pretrained_ckpt_path: '/users/spandit/myscratch/runs-ch/mpp-runs/MPP/basic_config/train_MPP_nsteps_14/training_checkpoints/ckpt.tar'
   train_data_paths: [
               ['/lustre/scratch5/exempt/artimis/data/lsc240420', 'lsc_npz', ''],
               ]
