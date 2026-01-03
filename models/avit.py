@@ -111,9 +111,9 @@ class AViT(nn.Module):
         x = rearrange(x, 't b c h w -> t b h w c')
 
         # SP DEBUG
-        labels0 = state_labels[0] if isinstance(state_labels, (list, tuple)) else state_labels
-        print("DEBUG labels min/max:", int(labels0.min().item()), int(labels0.max().item()))
-        print("DEBUG space_bag dim_in:", self.space_bag.dim_in)
+        #labels0 = state_labels[0] if isinstance(state_labels, (list, tuple)) else state_labels
+        #print("DEBUG labels min/max:", int(labels0.min().item()), int(labels0.max().item()))
+        #print("DEBUG space_bag dim_in:", self.space_bag.dim_in)
 
         x = self.space_bag(x, state_labels)
 
