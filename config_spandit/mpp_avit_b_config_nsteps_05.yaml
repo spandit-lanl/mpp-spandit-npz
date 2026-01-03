@@ -1,4 +1,4 @@
-basic_confi5: &basic_config
+basic_config: &basic_config
   # Run settings
   log_to_wandb: !!bool False # Use wandb integration
   log_to_screen: !!bool True # Log progress to screen.
