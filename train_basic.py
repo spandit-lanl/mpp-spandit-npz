@@ -193,19 +193,22 @@ class Trainer:
             self.epoch = self.startEpoch
         else:
             self.iters = 0
+
+        model_ref = self.model.module if hasattr(self.model, "module") else self.model
+
         if self.params.pretrained:
             if self.params.freeze_middle:
-                self.model.module.freeze_middle()
+                model_ref.freeze_middle()
             elif self.params.freeze_processor:
-                self.model.module.freeze_processor()
+                model_ref.freeze_processor()
             else:
-                self.model.module.unfreeze()
-            # See how much we need to expand the projections
+                model_ref.unfreeze()
+
             exp_proj = 0
-            # Iterate through the appended datasets and add on enough embeddings for all of them.
             for add_on in self.params.append_datasets:
                 exp_proj += len(DSET_NAME_TO_OBJECT[add_on]._specifics()[2])
-            self.model.module.expand_projections(exp_proj)
+                model_ref.expand_projections(exp_proj)
+
         checkpoint = None
         self.model = self.model.to(self.device)
 
