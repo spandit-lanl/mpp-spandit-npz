@@ -29,7 +29,7 @@ basic_config: &basic_config
   warmup_steps: 1000 # Warmup when not using DAdapt
   learning_rate: -1 # -1 means use DAdapt
   weight_decay: 1e-3
-  n_states: 12   # Number of state variables across the datasets - Can be larger than real number and things will just go unused
+  n_states: 20   # Number of state variables across the datasets - Can be larger than real number and things will just go unused
   state_names: ['Pressure', 'Vx', 'Vy', 'Density',  'Vx', 'Vy', 'Density', 'Pressure'] # Should be sorted
   dt: 1 # Striding of data - Not currently implemented > 1
   n_steps: 5 # Length of history to include in input
@@ -83,7 +83,7 @@ finetune: &finetune
   embedding_offset: 0 # Number of fields in original model - FT fields start after this
   freeze_middle: !!bool False # Whether to freeze the middle layers of the model
   freeze_processor: !!bool False
-  append_datasets: [] # List of datasets to append to the input/output projections for finetuning
+  append_datasets: ['lsc_npz'] # List of datasets to append to the input/output projections for finetuning
 
 
 frozen: &frozen
