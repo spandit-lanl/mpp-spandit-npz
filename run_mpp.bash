@@ -5,71 +5,94 @@
 ############################################################
 # Check that exactly two arguments are provided
 ############################################################
-if [ "$#" -ne 2 ]; then
-  echo "Usage: $0 <nsteps (1-16)> <pretrain|finetune>"
+if [ "$#" -ne 3 ]; then
+  echo "Usage: $0 <model_size: ti|s|b|l> <mode: pretrain|finetune> <nsteps: 1-16>"
+
   exit 1
 fi
 
-NSTEPS_INPUT="$1"
-PREFIX_MODE="$2"
+mdl_sz="$1"     # Model Size - Are we using tiny, small, big or large model
+mode="$2"         # Training Mode -  Can be pretrain or finetune
+ns_str="$3"   # n_steps - Input string for n_steps (history to use)
 
-##################################################
-# Validate range
-##################################################
-if [ "$NSTEPS_INPUT" -lt 1 ] || [ "$NSTEPS_INPUT" -gt 16 ]; then
-  echo "Error: nsteps must be between 1 and 16"
+############################################################
+# Validate model size (ti, s, b, l)
+############################################################
+if [ "$mdl_sz" != "ti" ] && [ "$mdl_sz" != "s" ] && \
+   [ "$mdl_sz" != "b" ] && [ "$mdl_sz" != "l" ]; then
+  echo "Error: model size must be 'ti', 's', 'b', or 'l'"
   exit 1
 fi
 
-
 ############################################################
-# Validate prefix mode
+# Validate prefix mode (pretrain or finetune)
 ############################################################
-if [ "$PREFIX_MODE" != "pretrain" ] && [ "$PREFIX_MODE" != "finetune" ]; then
-  echo "Error: prefix must be 'pretrain' or 'finetune'"
+if [ "$mode" != "pretrain" ] && [ "$mode" != "finetune" ]; then
+  echo "Error: mode must be 'pretrain' or 'finetune'"
   exit 1
 fi
 
 ##################################################
-# Format as two digits (01–16)
+# Validate n_steps range (1..16)
 ##################################################
-NSTEPS=$(printf "%02d" "$NSTEPS_INPUT")
 
-############################################################
-# Set prefix based on mode
-############################################################
+[[ "$ns_str" =~ ^[0-9]+$ ]] || { echo "Error: ns must be an integer"; exit 1; }
 
-############################################################
+if [ "$ns_str" -lt 1 ] || [ "$ns_str" -gt 16 ]; then
+  echo "Error: ns must be between 1 and 16"
+  exit 1
+fi
+
+#ns=$(printf "%02d" "$ns_str")  # Format as two digits (01–16)
+ns=$(printf "%02d" "$((10#$ns_str))") # Format as two digits (01–16)
+
 ############################################################
 # Define Training and Fine TUning data
 ############################################################
-############################################################
-TRAIN_DATA='MPP'
-FINETUNE_DATA='LSC'
+train_data='MPP'
+finetune_data='LSC'
 
-if [ "$PREFIX_MODE" = "pretrain" ]; then
-  runname="train_${TRAIN_DATA}"
-  runname="pretrain_${TRAIN_DATA}"
-  runcfg='basic_config'
+if [ "$mode" = "pretrain" ]; then
+  dataset='MPP'
+  cfgname='basic_config'
 else
-  runname="finetune_${FINETUNE_DATA}"
-  runcfg='finetune'
+  dataset='LSC'
+  cfgname='finetune'
 fi
 
-outdir="./mpp-output/${TRAIN_DATA}/${runname}"
+runname="${mode}_${mdl_sz}_${dataset}_nsteps_${ns}"
+#outdir="./mpp-output/${train_data}/${runname}"
+outdir="./mpp-output/${runname}"
 
 if [ ! -d ${outdir} ]; then
   mkdir -p ${outdir}
+fi
+
+cfgfile="config_spandit/mpp_avit_${mdl_sz}_config_nsteps_${ns}.yaml"
+if [[ ! -f "$cfgfile" ]]; then
+  echo "Error: YAML config not found: $cfgfile"
+  exit 1
+fi
+
+if [[ ! -r "$cfgfile" ]]; then
+  echo "Error: YAML config exists but is not readable: $cfgfile"
+  exit 1
 fi
 
 ############################################################
 # Run Training
 ############################################################
 
-echo "python train_basic.py                       \
-  --use_ddp                                 \
-  --run_name ${runname}_nsteps_${NSTEPS} \
-  --config ${runcfg}                    \
-  --yaml_config config/config_${TRAIN_DATA}/mpp_avit_ti_config_nsteps_${NSTEPS}.yaml \
-  &>> ${outdir}/out_${runname}_nsteps_${NSTEPS}.txt
+echo "Run Name: ${runname}"
+echo "Cfg Name: ${cfgname}"
+echo "Cfgfile: ${cfgfile}"
+echo ""
+: <<'IGNORE'
+echo "python train_basic.py \
+  --use_ddp                 \
+  --run_name ${runname}     \
+  --config ${cfgname}        \
+  --yaml_config ${cfgfile} \
+  &>> ${outdir}/out_${runname}.txt
 "
+IGNORE
