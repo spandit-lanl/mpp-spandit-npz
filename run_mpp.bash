@@ -48,24 +48,27 @@ TRAIN_DATA='MPP'
 FINETUNE_DATA='LSC'
 
 if [ "$PREFIX_MODE" = "pretrain" ]; then
-  RUN_PREFIX="train_${TRAIN_DATA}"
-  RUN_CONFIG='basic_config'
+  runname="train_${TRAIN_DATA}"
+  runcfg='basic_config'
 else
-  RUN_PREFIX="train_${TRAIN_DATA}_finetune_${FINETUNE_DATA}"
-  RUN_CONFIG='finetune'
+  runname="train_${TRAIN_DATA}_finetune_${FINETUNE_DATA}"
+  runcfg='finetune'
 fi
 
-OUT_DIR="./mpp-output/${TRAIN_DATA}/${RUN_PREFIX}"
+outdir="./mpp-output/${TRAIN_DATA}/${runname}"
 
-if [ ! -d ${OUT_DIR} ]; then
-  mkdir -p ${OUT_DIR}
+if [ ! -d ${outdir} ]; then
+  mkdir -p ${outdir}
 fi
 
 ############################################################
 # Run Training
 ############################################################
+echo "python train_basic.py --runname ${runname}_nsteps_${NSTEPS} --config ${runcfg} --yaml_config config/config_${TRAIN_DATA}/mpp_avit_ti_config_nsteps_${NSTEPS}.yaml &>> ${outdir}/out_${runname}_nsteps_${NSTEPS}.txt"
+
 python train_basic.py                       \
-  --run_name ${RUN_PREFIX}_nsteps_${NSTEPS} \
-  --config ${RUN_CONFIG}                    \
+  --use_ddp                                 \
+  --runname ${runname}_nsteps_${NSTEPS} \
+  --config ${runcfg}                    \
   --yaml_config config/config_${TRAIN_DATA}/mpp_avit_ti_config_nsteps_${NSTEPS}.yaml \
-  &>> ${OUT_DIR}/out_${RUN_PREFIX}_nsteps_${NSTEPS}.txt
+  &>> ${outdir}/out_${runname}_nsteps_${NSTEPS}.txt
