@@ -32,7 +32,7 @@ basic_config: &basic_config
   n_states: 12   # Number of state variables across the datasets - Can be larger than real number and things will just go unused
   state_names: ['Pressure', 'Vx', 'Vy', 'Density',  'Vx', 'Vy', 'Density', 'Pressure'] # Should be sorted
   dt: 1 # Striding of data - Not currently implemented > 1
-  n_steps: 6 # Length of history to include in input
+  n_steps: 8 # Length of history to include in input
   enforce_max_steps: !!bool False # If false and n_steps > dataset steps, use dataset steps. Otherwise, raise Exception.
   accum_grad: 5  # Real batch size is accum * batch_size, real steps/"epoch" is epoch_size / accum
   # Model settings
@@ -73,17 +73,17 @@ finetune: &finetune
   accum_grad: 1
   pretrained: !!bool True
   group: 'debugging'
-  pretrained_ckpt_path: '/users/spandit/myscratch/runs-ch/mpp-runs/MPP/basic_config/train_MPP_nsteps_06/training_checkpoints/ckpt.tar'
+  pretrained_ckpt_path: '/users/spandit/myscratch/runs-ch/mpp-runs/MPP/basic_config/train_MPP_nsteps_08/training_checkpoints/ckpt.tar'
   train_data_paths: [
               ['/lustre/scratch5/exempt/artimis/data/lsc240420', 'lsc_npz', ''],
               ]
   valid_data_paths: [  # These are the same for all configs - uses split according to train_val_test
               ['/lustre/scratch5/exempt/artimis/data/lsc240420', 'lsc_npz', ''],
               ]
-  embedding_offset: 0 # Number of fields in original model - FT fields start after this
+  embedding_offset: 12 # Number of fields in original model - FT fields start after this
   freeze_middle: !!bool False # Whether to freeze the middle layers of the model
   freeze_processor: !!bool False
-  append_datasets: [] # List of datasets to append to the input/output projections for finetuning
+  append_datasets: ['lsc_npz'] # List of datasets to append to the input/output projections for finetuning
 
 
 frozen: &frozen

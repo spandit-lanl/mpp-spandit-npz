@@ -80,10 +80,10 @@ finetune: &finetune
   valid_data_paths: [  # These are the same for all configs - uses split according to train_val_test
               ['/lustre/scratch5/exempt/artimis/data/lsc240420', 'lsc_npz', ''],
               ]
-  embedding_offset: 0 # Number of fields in original model - FT fields start after this
+  embedding_offset: 12 # Number of fields in original model - FT fields start after this
   freeze_middle: !!bool False # Whether to freeze the middle layers of the model
   freeze_processor: !!bool False
-  append_datasets: [] # List of datasets to append to the input/output projections for finetuning
+  append_datasets: ['lsc_npz'] # List of datasets to append to the input/output projections for finetuning
 
 
 frozen: &frozen
