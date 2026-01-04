@@ -97,17 +97,10 @@ echo "python train_basic.py \
 "
 #IGNORE
 
-if [ "$mode" = "pretrain" ]; then
-  python train_basic.py \
-    --run_name ${runname}     \
-    --config ${cfgname}        \
-    --yaml_config ${cfgfile} \
-    &>> ${outdir}/out_${runname}.txt
-else
-  python train_basic.py \
-    --use_ddp                 \
-    --run_name ${runname}     \
-    --config ${cfgname}        \
-    --yaml_config ${cfgfile} \
-    &>> ${outdir}/out_${runname}.txt
-fi
+python train_basic.py \
+  --run_name ${runname}     \
+  --config ${cfgname}        \
+  --yaml_config ${cfgfile} \
+  &>> ${outdir}/out_${runname}.txt
+
+#-- use_ddp                \
