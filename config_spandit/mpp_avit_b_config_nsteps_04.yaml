@@ -74,7 +74,6 @@ finetune: &finetune
   pretrained: !!bool True
   group: 'debugging'
   pretrained_ckpt_path: './mpp-runs-finetune/basic_config/pretrain_b_MPP_nsteps_04/training_checkpoints/ckpt.tar'
-
   train_data_paths: [
               ['/lustre/scratch5/exempt/artimis/data/lsc240420', 'lsc_npz', ''],
               ]
