@@ -62,7 +62,7 @@ fi
 
 runname="${mode}_${mdl_sz}_${dataset}_nsteps_${ns}"
 #outdir="./mpp-output/${train_data}/${runname}"
-outdir="./mpp-output/${runname}"
+outdir="./mpp-output-finetune/${runname}"
 
 if [ ! -d ${outdir} ]; then
   mkdir -p ${outdir}
@@ -83,16 +83,24 @@ fi
 # Run Training
 ############################################################
 
+#: <<'IGNORE'
 echo "Run Name: ${runname}"
 echo "Cfg Name: ${cfgname}"
 echo "Cfgfile: ${cfgfile}"
 echo ""
-: <<'IGNORE'
+
 echo "python train_basic.py \
-  --use_ddp                 \
   --run_name ${runname}     \
   --config ${cfgname}        \
   --yaml_config ${cfgfile} \
   &>> ${outdir}/out_${runname}.txt
 "
-IGNORE
+#IGNORE
+
+#  --use_ddp                 \
+python train_basic.py \
+  --run_name ${runname}     \
+  --config ${cfgname}        \
+  --yaml_config ${cfgfile} \
+  &>> ${outdir}/out_${runname}.txt
+
