@@ -73,7 +73,7 @@ finetune: &finetune
   accum_grad: 1
   pretrained: !!bool True
   group: 'debugging'
-  pretrained_ckpt_path: '/users/spandit/myscratch/runs-ch/mpp-runs/MPP/basic_config/train_MPP_nsteps_08/training_checkpoints/ckpt.tar'
+  pretrained_ckpt_path: './mpp-runs-finetune/basic_config/pretrain_b_MPP_nsteps_08/training_checkpoints/ckpt.tar'
   train_data_paths: [
               ['/lustre/scratch5/exempt/artimis/data/lsc240420', 'lsc_npz', ''],
               ]
