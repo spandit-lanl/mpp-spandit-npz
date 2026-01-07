@@ -27,8 +27,8 @@ fi
 ############################################################
 # Validate prefix mode (pretrain or finetune)
 ############################################################
-if [ "$mode" != "pretrain" ] && [ "$mode" != "finetune" ]; then
-  echo "Error: mode must be 'pretrain' or 'finetune'"
+if [ "$mode" != "pretrain" ] && [ "$mode" != "finetune" ] && [ "$mode" != "finetune_resume" ] ; then
+  echo "Error: mode must be 'pretrain' 'finetune', or 'finetune_resume'"
   exit 1
 fi
 
@@ -55,12 +55,13 @@ finetune_data='LSC'
 if [ "$mode" = "pretrain" ]; then
   dataset='MPP'
   cfgname='basic_config'
+  runname="pretrain__${mdl_sz}_${dataset}_nsteps_${ns}"
 else
   dataset='LSC'
-  cfgname='finetune'
+  cfgname="$mode"
+  runname="finetune_${mdl_sz}_${dataset}_nsteps_${ns}"
 fi
 
-runname="${mode}_${mdl_sz}_${dataset}_nsteps_${ns}"
 #outdir="./mpp-output/${train_data}/${runname}"
 outdir="./mpp-output-finetune/${runname}"
 
@@ -83,24 +84,12 @@ fi
 # Run Training
 ############################################################
 
-#: <<'IGNORE'
+cmd="python train_basic.py --run_name ${runname} --config ${cfgname} --yaml_config ${cfgfile}"
+
 echo "Run Name: ${runname}"
 echo "Cfg Name: ${cfgname}"
 echo "Cfgfile: ${cfgfile}"
-echo ""
+echo -e "\n$cmd &>> ${outdir}/out_${runname}.txt \n"
 
-echo "python train_basic.py \
-  --run_name ${runname}     \
-  --config ${cfgname}        \
-  --yaml_config ${cfgfile} \
-  &>> ${outdir}/out_${runname}.txt
-"
-#IGNORE
-
-python train_basic.py \
-  --run_name ${runname}     \
-  --config ${cfgname}        \
-  --yaml_config ${cfgfile} \
-  &>> ${outdir}/out_${runname}.txt
-
+${cmd} &>> ${outdir}/out_${runname}.txt
 #-- use_ddp                \
