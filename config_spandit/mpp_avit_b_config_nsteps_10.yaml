@@ -68,22 +68,33 @@ basic_config: &basic_config
 
 finetune: &finetune
   <<: *basic_config
-  max_epochs: 500
+  max_epochs: 375
   train_val_test: [.8, .1, .1]
   accum_grad: 1
   pretrained: !!bool True
   group: 'debugging'
   pretrained_ckpt_path: './mpp-runs-finetune/basic_config/pretrain_b_MPP_nsteps_10/training_checkpoints/ckpt.tar'
   train_data_paths: [
-              ['/lustre/scratch5/exempt/artimis/data/lsc240420', 'lsc_npz', ''],
+              ['/lustre/scratch5/exempt/artimis/data/mpp_finetune_on_lsc/train_35_percent_lsc', 'lsc_npz', ''],
               ]
   valid_data_paths: [  # These are the same for all configs - uses split according to train_val_test
-              ['/lustre/scratch5/exempt/artimis/data/lsc240420', 'lsc_npz', ''],
+              ['/lustre/scratch5/exempt/artimis/data/mpp_finetune_on_lsc/train_35_percent_lsc', 'lsc_npz', ''],
               ]
   embedding_offset: 12 # Number of fields in original model - FT fields start after this
   freeze_middle: !!bool False # Whether to freeze the middle layers of the model
   freeze_processor: !!bool False
   append_datasets: ['lsc_npz'] # List of datasets to append to the input/output projections for finetuning
+
+
+finetune_resume: &finetune_resume
+  <<: *finetune
+
+  # Resume finetuning from the last finetune checkpoint (training_checkpoints/ckpt.tar) in the run directory.
+  # IMPORTANT: use the SAME --run_name as the prior finetune run so ckpt.tar exists and resuming=True.
+
+  n_states: 20  # 12 (pretrain) + 8 (LSC appended fields) after expansion in the initial finetune run
+  pretrained: !!bool False  # prevent falling back to the 12-state pretrained_ckpt_path if ckpt.tar is missing
+  append_datasets: []  # already expanded in the initial finetune run; avoid expanding twice on resume
 
 
 frozen: &frozen
