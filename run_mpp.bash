@@ -55,7 +55,7 @@ finetune_data='LSC'
 if [ "$mode" = "pretrain" ]; then
   dataset='MPP'
   cfgname='basic_config'
-  runname="pretrain__${mdl_sz}_${dataset}_nsteps_${ns}"
+  runname="pretrain_${mdl_sz}_${dataset}_nsteps_${ns}"
 else
   dataset='LSC'
   cfgname="$mode"
