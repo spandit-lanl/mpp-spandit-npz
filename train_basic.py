@@ -505,7 +505,7 @@ class Trainer:
                 self.single_print(f'Time for train {valid_start-start}. For valid: {post_start-valid_start}. For postprocessing:{cur_time-post_start}')
                 self.single_print('Time taken for epoch {} is {} sec'.format(epoch + 1, time.time()-start))
                 #self.single_print('Train loss: {}. Valid loss: {}'.format(train_logs['train_nrmse'], valid_logs['valid_nrmse']))
-                self.single_print('Epoch {}: Train loss: {}. Valid loss: {}'.format(epoch, train_logs['train_nrmse'], valid_logs['valid_nrmse']))
+                self.single_print('Epoch: {}. Train loss: {}. Valid loss: {}'.format(epoch+1, train_logs['train_nrmse'], valid_logs['valid_nrmse']))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
