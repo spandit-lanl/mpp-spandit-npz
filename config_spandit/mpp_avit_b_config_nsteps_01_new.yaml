@@ -32,7 +32,7 @@ basic_config: &basic_config
   n_states: 12   # Number of state variables across the datasets - Can be larger than real number and things will just go unused
   state_names: ['Pressure', 'Vx', 'Vy', 'Density',  'Vx', 'Vy', 'Density', 'Pressure'] # Should be sorted
   dt: 1 # Striding of data - Not currently implemented > 1
-  n_steps: 15 # Length of history to include in input
+  n_steps: 1 # Length of history to include in input
   enforce_max_steps: !!bool False # If false and n_steps > dataset steps, use dataset steps. Otherwise, raise Exception.
   accum_grad: 5  # Real batch size is accum * batch_size, real steps/"epoch" is epoch_size / accum
   # Model settings
@@ -68,12 +68,12 @@ basic_config: &basic_config
 
 finetune: &finetune
   <<: *basic_config
-  max_epochs: 375
+  max_epochs: 500
   train_val_test: [.8, .1, .1]
   accum_grad: 1
   pretrained: !!bool True
   group: 'debugging'
-  pretrained_ckpt_path: './mpp-runs-finetune/basic_config/pretrain_b_MPP_nsteps_15/training_checkpoints/ckpt.tar'
+  pretrained_ckpt_path: './mpp-runs-finetune/basic_config/pretrain_b_MPP_nsteps_01/training_checkpoints/ckpt.tar'
   train_data_paths: [
               ['/lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune_on_lsc/train_35_percent_lsc', 'lsc_npz', ''],
               ]
@@ -92,6 +92,7 @@ finetune_resume: &finetune_resume
   # Resume finetuning from the last finetune checkpoint (training_checkpoints/ckpt.tar) in the run directory.
   # IMPORTANT: use the SAME --run_name as the prior finetune run so ckpt.tar exists and resuming=True.
 
+  max_epochs: 500
   n_states: 20  # 12 (pretrain) + 8 (LSC appended fields) after expansion in the initial finetune run
   pretrained: !!bool False  # prevent falling back to the 12-state pretrained_ckpt_path if ckpt.tar is missing
   append_datasets: []  # already expanded in the initial finetune run; avoid expanding twice on resume
