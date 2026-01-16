@@ -84,7 +84,8 @@ class LscNpzDataset(Dataset):
                             return None
                         arr = data[key]
                         arr = np.nan_to_num(arr, nan=0.0, posinf=0.0, neginf=0.0)
-                        arr = arr.astype(np.float32)
+                        #arr = arr.astype(np.float32)
+                        arr = arr.astype(np.float16)  # load fp16 from disk (Option A); convert to fp32 when making torch tensor
                         if arr.ndim != 2:
                             print(f"[SKIP] {key} in {fpath} is not 2D")
                             return None
@@ -151,7 +152,8 @@ class LscNpzDataset(Dataset):
                             return None
                         arr = data[key]
                         arr = np.nan_to_num(arr, nan=0.0, posinf=0.0, neginf=0.0)
-                        arr = arr.astype(np.float32)
+                        #arr = arr.astype(np.float32)
+                        arr = arr.astype(np.float16)  # load fp16 from disk (Option A); convert to fp32 when making torch tensor
                         if arr.ndim != 2:
                             print(f"[SKIP] {key} in {fpath} is not 2D")
                             return None
