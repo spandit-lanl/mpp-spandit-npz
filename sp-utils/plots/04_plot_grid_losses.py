@@ -173,7 +173,7 @@ def main():
 
     arr = np.array(all_vals, dtype=float)
     median_val = float(np.median(arr))
-    factor = 10
+    factor = 100
     cutoff = median_val * factor
     if cutoff <= 0:
         cutoff = float(np.quantile(arr, 0.99))
@@ -197,12 +197,18 @@ def main():
 
         # IMPORTANT: no epoch cap — we iterate all rows in combined_losses.csv
         for idx, (e, t, v) in enumerate(zip(epochs, train_vals, valid_vals)):
-            if t is not None and t <= cutoff:
+            #if t is not None and t <= cutoff:
+            if t is not None:
                 if idx < 5 or train_avg is None or t <= train_avg:
-                    tx.append(e); ty.append(t); plotted.append(t)
-            if v is not None and v <= cutoff:
+                     tx.append(e)
+                     ty.append(t)
+                     plotted.append(t)
+            #if v is not None and v <= cutoff:
+            if v is not None:
                 if idx < 5 or valid_avg is None or v <= valid_avg:
-                    vx.append(e); vy.append(v); plotted.append(v)
+                   vx.append(e)
+                   vy.append(v)
+                   plotted.append(v)
 
         series_by_key[k] = {"train_x": tx, "train_y": ty, "valid_x": vx, "valid_y": vy}
 
@@ -210,14 +216,14 @@ def main():
         raise SystemExit("After filtering, no points remain to plot.")
     y_max = max(plotted) * 1.05
 
-    # --- Grid size: 2 plots per row (plot ALL runs) ---
+    # --- Grid size: 4 plots per row (plot ALL runs) ---
     n = len(keys)
-    ncols = min(2, n)  # up to 2 columns, fewer if <2 runs
+    ncols = min(4, n)  # up to 4 columns, fewer if <4 runs
     nrows = math.ceil(n / ncols)
 
-    # Scale figure size with grid, but keep it reasonable
-    # Slightly wider per subplot since we're using fewer columns
-    fig_w = max(10, 4.8 * ncols)
+    # Scale figure size with grid, but keep it reasonable.
+    # With 4 columns, use a slightly narrower per-subplot width.
+    fig_w = max(12, 3.6 * ncols)
     fig_h = max(8, 3.0 * nrows)
 
     fig, axes = plt.subplots(nrows, ncols, figsize=(fig_w, fig_h), sharex=True, sharey=True)
