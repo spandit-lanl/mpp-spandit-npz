@@ -8,6 +8,7 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
+#from matplotlib.ticker import MultipleLocator
 
 # OLD: pretrain_n01_TrainLoss
 COL_RE_OLD = re.compile(r"^(pretrain|finetune)_n(\d+)_([A-Za-z]+)$")
@@ -250,7 +251,9 @@ def main():
         ax.set_title(runs[k]["label"], fontsize=9)
         ax.grid(True, alpha=0.3)
         ax.set_ylim(bottom=0, top=y_max)
-        ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+        #ax.xaxis.set_major_locator(MaxNLocator(integer=True, step=2))
+        ax.xaxis.set_major_locator(MaxNLocator(nbins=6, integer=True))
+        #ax.xaxis.set_major_locator(MultipleLocator(2))  # every 2 epochs
 
     fig.text(0.5, 0.02, "Epoch", ha="center")
     fig.text(0.02, 0.5, "Loss", va="center", rotation="vertical")

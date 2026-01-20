@@ -16,8 +16,11 @@ for f in ./../*log ./../*.txt; do
   if [[ "$stem" =~ ^(pretrain|finetune)_(L)_ ]]; then
     # already has _L_
     outstem="$stem"
+  elif [[ "$stem" =~ ^(pretrain|finetune)_(B)_ ]]; then
+    # already has _B_
+    outstem="$stem"
   elif [[ "$stem" =~ ^(pretrain|finetune)_ ]]; then
-    # does not have _L_ after phase -> insert _B_
+    # does not have _L_ or _B_ after phase -> insert _B_
     phase="${BASH_REMATCH[1]}"
     rest="${stem#${phase}_}"
     outstem="${phase}_B_${rest}"

@@ -49,7 +49,7 @@ case "$wd" in 3|4) ;; *) echo "ERROR: wd must be 3 or 4 (got: $wd)" >&2; exit 2;
 ns2="$(printf '%02d' "$ns")"
 
 # Config filename
-CFG_NAME="mpp_avit_b_ns-${ns2}_lr-${lr}_af-${af}_opt-${opt}_wd-${wd}.yaml"
+CFG_NAME="mpp_avit_B_ns-${ns2}_lr-${lr}_af-${af}_opt-${opt}_wd-${wd}.yaml"
 
 # RUN_NAME should use "finetune" for both finetune and finetune_resume
 run_phase="$phase"
@@ -59,7 +59,7 @@ fi
 
 # Construct RUN_NAME by replacing the whole prefix and removing extension
 RUN_NAME="${CFG_NAME%.yaml}"
-RUN_NAME="${RUN_NAME/mpp_avit_b_ns-${ns2}/${run_phase}_${ns2}}"
+RUN_NAME="${RUN_NAME/mpp_avit_B_ns-${ns2}/${run_phase}_${ns2}}"
 
 # (Optional) verify config exists
 if [[ ! -f "${conf_dir}/${CFG_NAME}" ]]; then
@@ -82,7 +82,7 @@ cmd="${cmd} &>>${LOG}"
 echo "${cmd}"
 # Output
 #echo "CFG_NAME=$CFG_NAME"
-#echo sed "s/pretrain_b_MPP_nsteps_01/${RUN_NAME}/" ${conf_dir}/${CFG_NAME}
+#echo sed "s/pretrain_B_MPP_nsteps_01/${RUN_NAME}/" ${conf_dir}/${CFG_NAME}
 #printf 'CMD='; printf '%q ' "${CMD[@]}"; echo
 echo
 # Uncomment to execute:

@@ -154,6 +154,14 @@ class Trainer:
                     warmup = torch.optim.lr_scheduler.LinearLR(self.optimizer, start_factor=.01, end_factor=1.0, total_iters=k)
                     decay = torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, eta_min=params.learning_rate / 100, T_max=sched_epochs)
                     self.scheduler = torch.optim.lr_scheduler.SequentialLR(self.optimizer, [warmup, decay], [k], last_epoch=(params.epoch_size*self.startEpoch)-1)
+                else:
+                    # If warmup is finished, still create a cosine scheduler
+                    self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+                        self.optimizer,
+                        last_epoch=(self.startEpoch * params.epoch_size) - 1,
+                        T_max=sched_epochs * params.epoch_size,
+                        eta_min=params.learning_rate / 100,
+                    )
         else:
             self.scheduler = None
 
@@ -296,7 +304,7 @@ class Trainer:
                     self.gscaler.step(self.optimizer)
                     self.gscaler.update()
                     self.optimizer.zero_grad(set_to_none=True)
-                    if self.scheduler is not None:
+                    if getattr(self, "scheduler", None) is not None:
                         self.scheduler.step()
                     optimizer_step = time.time() - backward_end
                 tr_time += time.time() - model_start
