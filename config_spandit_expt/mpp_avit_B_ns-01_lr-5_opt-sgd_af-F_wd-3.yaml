@@ -23,7 +23,7 @@ basic_config: &basic_config
   n_steps: 1 # Length of history to include in input
   learning_rate: -1 # -1 means use DAdapt
   use_all_fields: !!bool True # Prepopulate the field metadata dictionary from dictionary in datasets
-  optimizer: 'adan' # adam, adan, whatever else i end up adding - adan did better on HP sweep
+  optimizer: 'sgd' # adam, adan, whatever else i end up adding - adan did better on HP sweep
   max_epochs: 800
   scheduler_epochs: -1
   epoch_size: 1000 # Artificial epoch size
@@ -68,16 +68,16 @@ basic_config: &basic_config
 
 finetune: &finetune
   <<: *basic_config
-  learning_rate: 1e-4 # -1 means use DAdapt
-  use_all_fields: !!bool True # Prepopulate the field metadata dictionary from dictionary in datasets
-  optimizer: 'adan' # adam, adan, whatever else i end up adding - adan did better on HP sweep
+  learning_rate: 1e-5 # -1 means use DAdapt
+  use_all_fields: !!bool False # Prepopulate the field metadata dictionary from dictionary in datasets
+  optimizer: 'sgd' # adam, adan, whatever else i end up adding - adan did better on HP sweep
   max_epochs: 2100 
-  weight_decay: 1e-4
+  weight_decay: 1e-3
   train_val_test: [.8, .1, .1]
   accum_grad: 1
   pretrained: !!bool True
   group: 'debugging'
-  pretrained_ckpt_path: './mpp-runs-expt/basic_config/pretrain_B_01_lr-3_opt-adan_af-T_wd-4/training_checkpoints/ckpt.tar'
+  pretrained_ckpt_path: './mpp-runs-expt/basic_config/pretrain_B_01_lr-5_opt-sgd_af-F_wd-3/training_checkpoints/ckpt.tar'
   train_data_paths: [
               ['/lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune_on_lsc/lsc240420_fp16_full_train_35_percent_lsc', 'lsc_npz', ''],
               ]

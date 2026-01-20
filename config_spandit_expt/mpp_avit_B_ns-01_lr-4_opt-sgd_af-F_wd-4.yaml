@@ -68,10 +68,10 @@ basic_config: &basic_config
 
 finetune: &finetune
   <<: *basic_config
-  learning_rate: 1e-5 # -1 means use DAdapt
+  learning_rate: 1e-4 # -1 means use DAdapt
   use_all_fields: !!bool False # Prepopulate the field metadata dictionary from dictionary in datasets
   optimizer: 'sgd' # adam, adan, whatever else i end up adding - adan did better on HP sweep
-  max_epochs: 2100 
+  max_epochs: 2100
   weight_decay: 1e-4
   train_val_test: [.8, .1, .1]
   accum_grad: 1
@@ -97,7 +97,6 @@ finetune_resume: &finetune_resume
   # IMPORTANT: use the SAME --run_name as the prior finetune run so ckpt.tar exists and resuming=True.
 
   n_states: 20  # 12 (pretrain) + 8 (LSC appended fields) after expansion in the initial finetune run
-  pretrained: !!bool False  # prevent falling back to the 12-state pretrained_ckpt_path if ckpt.tar is missing
   append_datasets: []  # already expanded in the initial finetune run; avoid expanding twice on resume
 
 
