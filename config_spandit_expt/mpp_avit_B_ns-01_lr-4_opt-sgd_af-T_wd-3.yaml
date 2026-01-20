@@ -77,7 +77,7 @@ finetune: &finetune
   accum_grad: 1
   pretrained: !!bool True
   group: 'debugging'
-  pretrained_ckpt_path: './mpp-runs-expt/basic_config/pretrain_01_lr-4_af-T_opt-sgd_wd-3/training_checkpoints/ckpt.tar'
+  pretrained_ckpt_path: './mpp-runs-expt/basic_config/pretrain_B_01_lr-4_opt-sgd_af-T_wd-3/training_checkpoints/ckpt.tar'
   train_data_paths: [
               ['/lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune_on_lsc/lsc240420_fp16_full_train_35_percent_lsc', 'lsc_npz', ''],
               ]
