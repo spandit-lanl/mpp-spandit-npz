@@ -11,8 +11,8 @@ import re
 OLD_FNAME_RE = re.compile(r"^loss_(pretrain|finetune)_.*_nsteps_(\d+)\.csv$")
 
 # New style (extract_losses.bash output):
-#   loss_pretrain_B_01_lr-3_af-F_opt-adam_wd-3.csv
-#   loss_pretrain_L_01_lr-3_af-F_opt-adam_wd-3.csv
+#   loss_pretrain_B_01_lr-3_opt-adam_wd-3.csv
+#   loss_pretrain_L_01_lr-3_opt-adam_wd-3.csv
 #   loss_finetune_B_02_....
 #   loss_finetune_L_02_....
 NEW_BL_FNAME_RE = re.compile(
@@ -20,7 +20,7 @@ NEW_BL_FNAME_RE = re.compile(
 )
 
 # Optional backwards-compat (if any exist):
-#   loss_pretrain_01_lr-3_af-F_opt-adam_wd-3.csv
+#   loss_pretrain_01_lr-3_opt-adam_wd-3.csv
 NEW_NOFLAG_FNAME_RE = re.compile(r"^loss_(pretrain|finetune)_(\d+)(?:_(.*))?\.csv$")
 
 

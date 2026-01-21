@@ -13,7 +13,7 @@ from matplotlib.ticker import MaxNLocator
 # OLD: pretrain_n01_TrainLoss
 COL_RE_OLD = re.compile(r"^(pretrain|finetune)_n(\d+)_([A-Za-z]+)$")
 
-# NEW: pretrain_B_01_lr-3_af-F_opt-adam_wd-3_TrainLoss
+# NEW: pretrain_B_01_lr-3_opt-adam_wd-3_TrainLoss
 COL_RE_NEW = re.compile(r"^(pretrain|finetune)_(B|L)_(\d+)_(.*)_(TrainLoss|ValidLoss)$")
 
 

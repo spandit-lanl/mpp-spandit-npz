@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-conf_dir='config_spandit_expt'
+conf_dir='config/sp_expt'
 
 usage() {
   cat <<'EOF'
-Usage: pick_cfg.sh <phase:pretrain|finetune|finetune_resume> <ns:1-16> <lr:3|4> <af:F|T> <opt:adam|adan|sgd> <wd:3|4>
+Usage: pick_cfg.sh <phase:pretrain|finetune|finetune_resume> <ns:1-16> <lr:3|4> <opt:adam|adan|sgd> <wd:3|4>
 
 Example:
   ./pick_cfg.sh finetune 3 3 T adam 4
@@ -20,9 +20,8 @@ fi
 phase="$1"
 ns="$2"
 lr="$3"
-af="$4"
-opt="$5"
-wd="$6"
+opt="$4"
+wd="$5"
 
 # Validate phase
 case "$phase" in
@@ -41,7 +40,6 @@ fi
 
 # Validate remaining args
 case "$lr" in 3|4) ;; *) echo "ERROR: lr must be 3 or 4 (got: $lr)" >&2; exit 2;; esac
-case "$af" in F|T) ;; *) echo "ERROR: af must be F or T (got: $af)" >&2; exit 2;; esac
 case "$opt" in adam|adan|sgd) ;; *) echo "ERROR: opt must be adam, adan, or sgd (got: $opt)" >&2; exit 2;; esac
 case "$wd" in 3|4) ;; *) echo "ERROR: wd must be 3 or 4 (got: $wd)" >&2; exit 2;; esac
 
@@ -49,7 +47,7 @@ case "$wd" in 3|4) ;; *) echo "ERROR: wd must be 3 or 4 (got: $wd)" >&2; exit 2;
 ns2="$(printf '%02d' "$ns")"
 
 # Config filename
-CFG_NAME="mpp_avit_B_ns-${ns2}_lr-${lr}_af-${af}_opt-${opt}_wd-${wd}.yaml"
+CFG_NAME="mpp_avit_B_ns-${ns2}_lr-${lr}_opt-${opt}_wd-${wd}.yaml"
 
 # RUN_NAME should use "finetune" for both finetune and finetune_resume
 run_phase="$phase"
