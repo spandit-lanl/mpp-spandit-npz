@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-conf_dir='config/sp_expt'
+conf_dir='config/sp_lsc'
 
 usage() {
   cat <<'EOF'
