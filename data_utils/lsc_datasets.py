@@ -20,20 +20,6 @@ IMAGE_WIDTH = IMAGE_WIDTH_FULL_IMAGE
 IMAGE_HEIGHT = IMAGE_HEIGHT_PADDED
 IMAGE_HEIGHT = IMAGE_HEIGHT_CROPPED
 
-selected_fields = [
-    'Uvelocity',
-    'Wvelocity',
-    'density_case',
-    'density_cushion',
-    'density_maincharge',
-    'density_outside_air',
-    'density_striker',
-    'density_throw'
-]
-
-num_active_fields = len(selected_fields)
-
-
 class LscNpzDataset(Dataset):
     def __init__(self,
                  path,
@@ -80,9 +66,12 @@ class LscNpzDataset(Dataset):
         return len(self.indices)
 
     def get_name(self, full_name=False):
-        return "lsc_npz"
+        return "lsc_npz"  # or whatever label you want to appear in logs
 
     def __getitem__(self, idx: int):
+        selected_fields = [
+            'Uvelocity', 'Wvelocity', 'density_case', 'density_cushion', 'density_maincharge', 'density_outside_air', 'density_striker', 'density_throw'
+        ]
 
         def load_tensor(fpath):
             try:
@@ -95,10 +84,8 @@ class LscNpzDataset(Dataset):
                             return None
                         arr = data[key]
                         arr = np.nan_to_num(arr, nan=0.0, posinf=0.0, neginf=0.0)
-
-                        # keep identical behavior to LSC: load fp16 from disk, convert to fp32 torch tensor
-
-        arr = arr.astype(np.float16)
+                        #arr = arr.astype(np.float32)
+                        arr = arr.astype(np.float16)  # load fp16 from disk (Option A); convert to fp32 when making torch tensor
                         if arr.ndim != 2:
                             print(f"[SKIP] {key} in {fpath} is not 2D")
                             return None
@@ -115,7 +102,7 @@ class LscNpzDataset(Dataset):
 
         while attempt < max_retries:
             true_idx = self.indices[idx]
-            input_files = self.file_list[true_idx: true_idx + self.n_steps]
+            input_files = self.file_list[true_idx : true_idx + self.n_steps]
             target_file = self.file_list[true_idx + self.n_steps]
 
             input_tensors = []
@@ -146,13 +133,75 @@ class LscNpzDataset(Dataset):
             print(f" - {p}")
         raise IndexError(f"Skipping idx={idx} after {max_retries} failures.")
 
+    '''
+    def __getitem__(self, idx: int):
+        selected_fields = [
+            'Uvelocity', 'Wvelocity', 'density_case', 'density_cushion', 'density_maincharge', 'density_outside_air', 'density_striker', 'density_throw'
+        ]
+
+        def load_tensor(fpath):
+            if not fpath.endswith(".npz"):
+                print(f"[SKIP] Skipping non-npz file: {fpath}")
+                return None
+            try:
+                with np.load(fpath) as data:
+                    arrays = []
+                    for key in selected_fields:
+                        if key not in data:
+                            print(f"[SKIP] Missing key {key} in {fpath}")
+                            return None
+                        arr = data[key]
+                        arr = np.nan_to_num(arr, nan=0.0, posinf=0.0, neginf=0.0)
+                        #arr = arr.astype(np.float32)
+                        arr = arr.astype(np.float16)  # load fp16 from disk (Option A); convert to fp32 when making torch tensor
+                        if arr.ndim != 2:
+                            print(f"[SKIP] {key} in {fpath} is not 2D")
+                            return None
+                        arrays.append(arr)
+                    stacked = np.stack(arrays, axis=0)[:, :IMAGE_WIDTH, :IMAGE_HEIGHT]
+                    return torch.tensor(stacked, dtype=torch.float32)
+            except Exception as e:
+                print(f"[SKIP] Failed to load {fpath}: {e}")
+                return None
+
+        # Now handle retry logic
+        max_retries = 5
+        attempt = 0
+        while attempt < max_retries:
+            true_idx = self.indices[idx]
+            input_files = self.file_list[true_idx : true_idx + self.n_steps]
+            target_file = self.file_list[true_idx + self.n_steps]
+
+            input_tensors = []
+            for f in input_files:
+                t = load_tensor(os.path.join(self.root_dir, f))
+                if t is None:
+                    print(f"[SKIP] Bad input file in sequence {input_files}. Retrying...")
+                    idx = (idx + 1) % len(self)
+                    attempt += 1
+                    break
+                input_tensors.append(t)
+            else:
+                x = torch.stack(input_tensors, dim=0)
+                y = load_tensor(os.path.join(self.root_dir, target_file))
+                if y is None:
+                    print(f"[SKIP] Bad target file {target_file}. Retrying...")
+                    idx = (idx + 1) % len(self)
+                    attempt += 1
+                    continue
+                bcs = torch.zeros(2)
+                return x, bcs, y
+
+        raise RuntimeError(f"[ERROR] Too many failed attempts at idx={idx}")
+    '''
 
     @staticmethod
-    def _specifics(self):
-        # Keep the same interface as other datasets: (time_index, sample_index, field_names, type, split_level)
+    def _specifics():
         time_index = 0
         sample_index = None
-        field_names = selected_fields
+        field_names = [
+            'Uvelocity', 'Wvelocity', 'density_case', 'density_cushion', 'density_maincharge', 'density_outside_air', 'density_striker', 'density_throw'
+        ]
         type = 'lsc_npz'
         split_level = 'sample'
         return time_index, sample_index, field_names, type, split_level
@@ -167,5 +216,7 @@ class LscNpzDataset(Dataset):
     def get_per_file_dsets(self):
         # No sub-files — treat whole dataset as one logical file
         return [self]
+
+
 
 

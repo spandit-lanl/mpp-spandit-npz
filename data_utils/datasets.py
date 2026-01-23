@@ -17,6 +17,7 @@ import os
 import glob
 
 from .lsc_datasets import LscNpzDataset
+from .clx_datasets import ClxNpzDataset
 
 broken_paths = []
 # IF YOU ADD A NEW DSET MAKE SURE TO UPDATE THIS MAPPING SO MIXED DSET KNOWS HOW TO USE IT
@@ -26,6 +27,7 @@ DSET_NAME_TO_OBJECT = {
     'diffre2d': DiffRe2DDataset,
     'compNS': CompNSDataset,
     'lsc_npz': LscNpzDataset,
+    'clx_npz': ClxNpzDataset,
 }
 
 
@@ -110,6 +112,7 @@ class MixedDataset(Dataset):
                 'compNS': [0, 1, 2, 3],
                 'diffre2d': [4, 5],
                 'lsc_npz': [0, 1, 2, 3, 4, 5, 6, 7],
+                'clx_npz': [0, 1, 2, 3, 4, 5, 6, 7],
             }
         elif self.use_all_fields:
             cur_max = 0
