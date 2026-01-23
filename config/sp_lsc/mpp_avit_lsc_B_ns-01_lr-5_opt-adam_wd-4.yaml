@@ -10,7 +10,7 @@ basic_config: &basic_config
   enable_amp: !!bool False # Use automatic mixed precision - blows up with low variance fields right now
   compile: !!bool False # Compile model - Does not currently work
   gradient_checkpointing: !!bool False # Whether to use gradient checkpointing - Slow, but lower memory
-  exp_dir: './mpp-runs-expt' # Output path
+  exp_dir: './runs/lsc' # Output path
   log_interval: 1 # How often to log - Don't think this is actually implemented
   pretrained: !!bool False # Whether to load a pretrained model
   # wandb settings
@@ -31,7 +31,7 @@ basic_config: &basic_config
   scheduler: 'cosine' # Only cosine implemented
   warmup_steps: 1000 # Warmup when not using DAdapt
   weight_decay: 1e-3
-  n_states: 12   # Number of state variables across the datasets - Can be larger than real number and things will just go unused
+  n_states: 64   # Number of state variables across the datasets - Can be larger than real number and things will just go unused
   state_names: ['Pressure', 'Vx', 'Vy', 'Density',  'Vx', 'Vy', 'Density', 'Pressure'] # Should be sorted
   dt: 1 # Striding of data - Not currently implemented > 1
   enforce_max_steps: !!bool False # If false and n_steps > dataset steps, use dataset steps. Otherwise, raise Exception.
@@ -77,7 +77,7 @@ finetune: &finetune
   accum_grad: 1
   pretrained: !!bool True
   group: 'debugging'
-  pretrained_ckpt_path: './mpp-runs-expt/basic_config/pretrain_lsc_B_01_lr-5_opt-adam_wd-4/training_checkpoints/ckpt.tar'
+  pretrained_ckpt_path: './mpp-runs-expt/basic_config/lsc_pretrain_B_ns-01_lr-5_opt-adam_wd-4/training_checkpoints/ckpt.tar'
   train_data_paths: [
               ['/lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_fp16_full_train_35_percent_lsc', 'lsc_npz', ''],
               ]
@@ -96,7 +96,7 @@ finetune_resume: &finetune_resume
   # Resume finetuning from the last finetune checkpoint (training_checkpoints/ckpt.tar) in the run directory.
   # IMPORTANT: use the SAME --run_name as the prior finetune run so ckpt.tar exists and resuming=True.
 
-  n_states: 20  # 12 (pretrain) + 8 (LSC appended fields) after expansion in the initial finetune run
+  n_states: 72  # 12 (pretrain) + 8 (LSC appended fields) after expansion in the initial finetune run
   pretrained: !!bool False  # prevent falling back to the 12-state pretrained_ckpt_path if ckpt.tar is missing
   append_datasets: []  # already expanded in the initial finetune run; avoid expanding twice on resume
 

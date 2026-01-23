@@ -1,6 +1,0 @@
-python train_basic.py --run_name pretrain_lsc_L_01_lr-5_opt-adam_wd-3 --config basic_config --yaml_config config/sp_lsc/mpp_avit_lsc_L_ns-01_lr-5_opt-adam_wd-3.yaml  &>>mpp-output-expt/out_pretrain_lsc_L_01_lr-5_opt-adam_wd-3.log
-python train_basic.py --run_name pretrain_lsc_L_01_lr-5_opt-adam_wd-4 --config basic_config --yaml_config config/sp_lsc/mpp_avit_lsc_L_ns-01_lr-5_opt-adam_wd-4.yaml  &>>mpp-output-expt/out_pretrain_lsc_L_01_lr-5_opt-adam_wd-4.log
-python train_basic.py --run_name pretrain_lsc_L_01_lr-5_opt-adan_wd-3 --config basic_config --yaml_config config/sp_lsc/mpp_avit_lsc_L_ns-01_lr-5_opt-adan_wd-3.yaml  &>>mpp-output-expt/out_pretrain_lsc_L_01_lr-5_opt-adan_wd-3.log
-python train_basic.py --run_name pretrain_lsc_L_01_lr-5_opt-adan_wd-4 --config basic_config --yaml_config config/sp_lsc/mpp_avit_lsc_L_ns-01_lr-5_opt-adan_wd-4.yaml  &>>mpp-output-expt/out_pretrain_lsc_L_01_lr-5_opt-adan_wd-4.log
-python train_basic.py --run_name pretrain_lsc_L_01_lr-5_opt-sgd_wd-3  --config basic_config --yaml_config config/sp_lsc/mpp_avit_lsc_L_ns-01_lr-5_opt-sgd_wd-3.yaml   &>>mpp-output-expt/out_pretrain_lsc_L_01_lr-5_opt-sgd_wd-3.log
-python train_basic.py --run_name pretrain_lsc_L_01_lr-5_opt-sgd_wd-4  --config basic_config --yaml_config config/sp_lsc/mpp_avit_lsc_L_ns-01_lr-5_opt-sgd_wd-4.yaml   &>>mpp-output-expt/out_pretrain_lsc_L_01_lr-5_opt-sgd_wd-4.log
