@@ -24,14 +24,14 @@ basic_config: &basic_config
   learning_rate: 1e-5 # -1 means use DAdapt
   use_all_fields: !!bool True # Prepopulate the field metadata dictionary from dictionary in datasets
   optimizer: 'adam' # adam, adan, whatever else i end up adding - adan did better on HP sweep
-  max_epochs: 1500
+  max_epochs: 2000
   scheduler_epochs: -1
   epoch_size: 1000 # Artificial epoch size
   rescale_gradients: !!bool False # Activate hook that scales block gradients to norm 1
   scheduler: 'cosine' # Only cosine implemented
   warmup_steps: 1000 # Warmup when not using DAdapt
   weight_decay: 1e-3
-  n_states: 64   # Number of state variables across the datasets - Can be larger than real number and things will just go unused
+  n_states: 12   # Number of state variables across the datasets - Can be larger than real number and things will just go unused
   state_names: ['Pressure', 'Vx', 'Vy', 'Density',  'Vx', 'Vy', 'Density', 'Pressure'] # Should be sorted
   dt: 1 # Striding of data - Not currently implemented > 1
   enforce_max_steps: !!bool False # If false and n_steps > dataset steps, use dataset steps. Otherwise, raise Exception.
@@ -77,7 +77,7 @@ finetune: &finetune
   learning_rate: 1e-5 # -1 means use DAdapt
   use_all_fields: !!bool False # Prepopulate the field metadata dictionary from dictionary in datasets
   optimizer: 'adam' # adam, adan, whatever else i end up adding - adan did better on HP sweep
-  max_epochs: 2100
+  max_epochs: 3000
   weight_decay: 1e-3
   train_val_test: [.8, .1, .1]
   accum_grad: 1

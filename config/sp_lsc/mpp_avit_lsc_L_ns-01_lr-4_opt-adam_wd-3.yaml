@@ -24,7 +24,7 @@ basic_config: &basic_config
   learning_rate: 1e-4 # -1 means use DAdapt
   use_all_fields: !!bool True # Prepopulate the field metadata dictionary from dictionary in datasets
   optimizer: 'adam' # adam, adan, whatever else i end up adding - adan did better on HP sweep
-  max_epochs: 1500
+  max_epochs: 2000
   scheduler_epochs: -1
   epoch_size: 1000 # Artificial epoch size
   rescale_gradients: !!bool False # Activate hook that scales block gradients to norm 1
@@ -77,7 +77,7 @@ finetune: &finetune
   learning_rate: 1e-4 # -1 means use DAdapt
   use_all_fields: !!bool False # Prepopulate the field metadata dictionary from dictionary in datasets
   optimizer: 'adam' # adam, adan, whatever else i end up adding - adan did better on HP sweep
-  max_epochs: 2100
+  max_epochs: 3000
   weight_decay: 1e-3
   train_val_test: [.8, .1, .1]
   accum_grad: 1

@@ -22,7 +22,7 @@ basic_config: &basic_config
   batch_size: 1
   n_steps: 1 # Length of history to include in input
   learning_rate: 1e-5 # -1 means use DAdapt
-  use_all_fields: !!bool True # Prepopulate the field metadata dictionary from dictionary in datasets
+  use_all_fields: !!bool False # Prepopulate the field metadata dictionary from dictionary in datasets
   optimizer: 'adan' # adam, adan, whatever else i end up adding - adan did better on HP sweep
   max_epochs: 2000
   scheduler_epochs: -1
@@ -75,7 +75,7 @@ basic_config: &basic_config
 finetune: &finetune
   <<: *basic_config
   learning_rate: 1e-5 # -1 means use DAdapt
-  use_all_fields: !!bool False # Prepopulate the field metadata dictionary from dictionary in datasets
+  use_all_fields: !!bool True # Prepopulate the field metadata dictionary from dictionary in datasets
   optimizer: 'adan' # adam, adan, whatever else i end up adding - adan did better on HP sweep
   max_epochs: 3000
   weight_decay: 1e-4

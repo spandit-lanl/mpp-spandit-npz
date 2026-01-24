@@ -22,8 +22,8 @@ basic_config: &basic_config
   batch_size: 1
   n_steps: 1 # Length of history to include in input
   learning_rate: 1e-5 # -1 means use DAdapt
-  use_all_fields: !!bool True # Prepopulate the field metadata dictionary from dictionary in datasets
-  optimizer: 'adan' # adam, adan, whatever else i end up adding - adan did better on HP sweep
+  use_all_fields: !!bool False # Prepopulate the field metadata dictionary from dictionary in datasets
+  optimizer: 'adam' # adam, adan, whatever else i end up adding - adan did better on HP sweep
   max_epochs: 2000
   scheduler_epochs: -1
   epoch_size: 1000 # Artificial epoch size
@@ -76,14 +76,14 @@ finetune: &finetune
   <<: *basic_config
   learning_rate: 1e-5 # -1 means use DAdapt
   use_all_fields: !!bool False # Prepopulate the field metadata dictionary from dictionary in datasets
-  optimizer: 'adan' # adam, adan, whatever else i end up adding - adan did better on HP sweep
+  optimizer: 'adam' # adam, adan, whatever else i end up adding - adan did better on HP sweep
   max_epochs: 3000
   weight_decay: 1e-4
   train_val_test: [.8, .1, .1]
   accum_grad: 1
   pretrained: !!bool True
   group: 'debugging'
-  pretrained_ckpt_path: './mpp-runs-expt/basic_config/lsc_pretrain_L_ns-01_lr-5_opt-adan_wd-4/training_checkpoints/ckpt.tar'
+  pretrained_ckpt_path: './mpp-runs-expt/basic_config/lsc_pretrain_L_ns-01_lr-5_opt-adam_wd-4/training_checkpoints/ckpt.tar'
   train_data_paths: [
               ['/lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_fp16_full_train_35_percent_lsc', 'lsc_npz', ''],
               ]
