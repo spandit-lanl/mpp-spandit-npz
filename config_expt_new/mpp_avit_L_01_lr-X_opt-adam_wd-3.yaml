@@ -21,30 +21,10 @@ basic_config: &basic_config
   drop_path: 0.1
   batch_size: 1
   n_steps: 1 # Length of history to include in input
-<<<<<<< HEAD
-<<<<<<<< HEAD:config/sp_expt/mpp_avit_lsc_L_ns-01_lr-5_opt-adam_wd-3.yaml
-  learning_rate: 1e-5 # -1 means use DAdapt
-  use_all_fields: !!bool True # Prepopulate the field metadata dictionary from dictionary in datasets
-  optimizer: 'adam' # adam, adan, whatever else i end up adding - adan did better on HP sweep
-  max_epochs: 1500
-========
-=======
-<<<<<<<< HEAD:config_expt_new/mpp_avit_L_01_lr-5_opt-adam_wd-3.yaml
-  learning_rate: 1e-5 # -1 means use DAdapt
-  use_all_fields: !!bool False # Prepopulate the field metadata dictionary from dictionary in datasets
-  optimizer: 'adam' # adam, adan, whatever else i end up adding - adan did better on HP sweep
-<<<<<<<< HEAD:config/sp_expt/mpp_avit_lsc_L_ns-01_lr-4_opt-adam_wd-3.yaml
-  max_epochs: 1500
-========
-  max_epochs: 3000
->>>>>>>> cfb876d (LSC-NEW pretraining working for LSC branhc in nmpp-spandit-npz):config_expt_new/mpp_avit_L_01_lr-5_opt-adam_wd-3.yaml
-========
->>>>>>> cfb876d (LSC-NEW pretraining working for LSC branhc in nmpp-spandit-npz)
   learning_rate: -1 # -1 means use DAdapt
   use_all_fields: !!bool False # Prepopulate the field metadata dictionary from dictionary in datasets
   optimizer: 'adam' # adam, adan, whatever else i end up adding - adan did better on HP sweep
   max_epochs: 3000
->>>>>>>> cfb876d (LSC-NEW pretraining working for LSC branhc in nmpp-spandit-npz):config_expt_new/mpp_avit_L_01_lr-X_opt-adam_wd-3.yaml
   scheduler_epochs: -1
   epoch_size: 1000 # Artificial epoch size
   rescale_gradients: !!bool False # Activate hook that scales block gradients to norm 1
@@ -94,45 +74,14 @@ basic_config: &basic_config
 
 finetune: &finetune
   <<: *basic_config
-<<<<<<< HEAD
-<<<<<<<< HEAD:config/sp_expt/mpp_avit_lsc_L_ns-01_lr-5_opt-adam_wd-3.yaml
-  learning_rate: 1e-5 # -1 means use DAdapt
-  use_all_fields: !!bool False # Prepopulate the field metadata dictionary from dictionary in datasets
   optimizer: 'adam' # adam, adan, whatever else i end up adding - adan did better on HP sweep
-  max_epochs: 2100
-========
-  optimizer: 'adam' # adam, adan, whatever else i end up adding - adan did better on HP sweep
-=======
-  optimizer: 'adam' # adam, adan, whatever else i end up adding - adan did better on HP sweep
-<<<<<<<< HEAD:config_expt_new/mpp_avit_L_01_lr-5_opt-adam_wd-3.yaml
-<<<<<<<< HEAD:config/sp_expt/mpp_avit_lsc_L_ns-01_lr-4_opt-adam_wd-3.yaml
-  max_epochs: 2100
-========
   max_epochs: 3000
->>>>>>>> cfb876d (LSC-NEW pretraining working for LSC branhc in nmpp-spandit-npz):config_expt_new/mpp_avit_L_01_lr-5_opt-adam_wd-3.yaml
-========
->>>>>>> cfb876d (LSC-NEW pretraining working for LSC branhc in nmpp-spandit-npz)
-  max_epochs: 3000
->>>>>>>> cfb876d (LSC-NEW pretraining working for LSC branhc in nmpp-spandit-npz):config_expt_new/mpp_avit_L_01_lr-X_opt-adam_wd-3.yaml
   weight_decay: 1e-3
   train_val_test: [.8, .1, .1]
   accum_grad: 1
   pretrained: !!bool True
   group: 'debugging'
-<<<<<<< HEAD
-<<<<<<<< HEAD:config/sp_expt/mpp_avit_lsc_L_ns-01_lr-5_opt-adam_wd-3.yaml
-  pretrained_ckpt_path: './mpp-runs-expt/basic_config/pretrain_lsc_L_01_lr-5_opt-adam_wd-3/training_checkpoints/ckpt.tar'
-=======
-<<<<<<<< HEAD:config_expt_new/mpp_avit_L_01_lr-5_opt-adam_wd-3.yaml
-<<<<<<<< HEAD:config/sp_expt/mpp_avit_lsc_L_ns-01_lr-4_opt-adam_wd-3.yaml
-  pretrained_ckpt_path: './mpp-runs-expt/basic_config/pretrain_lsc_L_01_lr-4_opt-adam_wd-3/training_checkpoints/ckpt.tar'
-========
-  pretrained_ckpt_path: './mpp-expt-new/basic_config/pretrain_L_01_lr-4_af-F_opt-adam_wd-3/training_checkpoints/ckpt.tar'
->>>>>>>> cfb876d (LSC-NEW pretraining working for LSC branhc in nmpp-spandit-npz):config_expt_new/mpp_avit_L_01_lr-5_opt-adam_wd-3.yaml
->>>>>>> cfb876d (LSC-NEW pretraining working for LSC branhc in nmpp-spandit-npz)
-========
   pretrained_ckpt_path: './mpp-expt-new/basic_config/pretrain_L_01_lr-3_af-F_opt-adam_wd-3/training_checkpoints/ckpt.tar'
->>>>>>>> cfb876d (LSC-NEW pretraining working for LSC branhc in nmpp-spandit-npz):config_expt_new/mpp_avit_L_01_lr-X_opt-adam_wd-3.yaml
   train_data_paths: [
               ['/lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune_on_lsc/lsc240420_fp16_full_train_35_percent_lsc', 'lsc_npz', ''],
               ]
