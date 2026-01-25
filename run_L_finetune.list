@@ -1,0 +1,12 @@
+python train_basic.py --run_name finetune_L_01_lr-5_opt-adam_wd-3 --config finetune --yaml_config config_expt_new/mpp_avit_L_01_lr-5_opt-adam_wd-3.yaml  &>>mpp-expt-new/out_finetune_L_01_lr-5_opt-adam_wd-3.log
+python train_basic.py --run_name finetune_L_01_lr-5_opt-adam_wd-4 --config finetune --yaml_config config_expt_new/mpp_avit_L_01_lr-5_opt-adam_wd-4.yaml  &>>mpp-expt-new/out_finetune_L_01_lr-5_opt-adam_wd-4.log
+python train_basic.py --run_name finetune_L_01_lr-5_opt-adan_wd-3 --config finetune --yaml_config config_expt_new/mpp_avit_L_01_lr-5_opt-adan_wd-3.yaml  &>>mpp-expt-new/out_finetune_L_01_lr-5_opt-adan_wd-3.log
+python train_basic.py --run_name finetune_L_01_lr-5_opt-adan_wd-4 --config finetune --yaml_config config_expt_new/mpp_avit_L_01_lr-5_opt-adan_wd-4.yaml  &>>mpp-expt-new/out_finetune_L_01_lr-5_opt-adan_wd-4.log
+python train_basic.py --run_name finetune_L_01_lr-5_opt-sgd_wd-3  --config finetune --yaml_config config_expt_new/mpp_avit_L_01_lr-5_opt-sgd_wd-3.yaml   &>>mpp-expt-new/out_finetune_L_01_lr-5_opt-sgd_wd-3.log
+python train_basic.py --run_name finetune_L_01_lr-5_opt-sgd_wd-4  --config finetune --yaml_config config_expt_new/mpp_avit_L_01_lr-5_opt-sgd_wd-4.yaml   &>>mpp-expt-new/out_finetune_L_01_lr-5_opt-sgd_wd-4.log
+python train_basic.py --run_name finetune_L_01_lr-X_opt-adam_wd-3 --config finetune --yaml_config config_expt_new/mpp_avit_L_01_lr-X_opt-adam_wd-3.yaml  &>>mpp-expt-new/out_finetune_L_01_lr-X_opt-adam_wd-3.log
+python train_basic.py --run_name finetune_L_01_lr-X_opt-adam_wd-4 --config finetune --yaml_config config_expt_new/mpp_avit_L_01_lr-X_opt-adam_wd-4.yaml  &>>mpp-expt-new/out_finetune_L_01_lr-X_opt-adam_wd-4.log
+python train_basic.py --run_name finetune_L_01_lr-X_opt-adan_wd-3 --config finetune --yaml_config config_expt_new/mpp_avit_L_01_lr-X_opt-adan_wd-3.yaml  &>>mpp-expt-new/out_finetune_L_01_lr-X_opt-adan_wd-3.log
+python train_basic.py --run_name finetune_L_01_lr-X_opt-adan_wd-4 --config finetune --yaml_config config_expt_new/mpp_avit_L_01_lr-X_opt-adan_wd-4.yaml  &>>mpp-expt-new/out_finetune_L_01_lr-X_opt-adan_wd-4.log
+python train_basic.py --run_name finetune_L_01_lr-X_opt-sgd_wd-3  --config finetune --yaml_config config_expt_new/mpp_avit_L_01_lr-X_opt-sgd_wd-3.yaml   &>>mpp-expt-new/out_finetune_L_01_lr-X_opt-sgd_wd-3.log
+python train_basic.py --run_name finetune_L_01_lr-X_opt-sgd_wd-4  --config finetune --yaml_config config_expt_new/mpp_avit_L_01_lr-X_opt-sgd_wd-4.yaml   &>>mpp-expt-new/out_finetune_L_01_lr-X_opt-sgd_wd-4.log
