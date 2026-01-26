@@ -4,13 +4,12 @@ shopt -s nullglob
 
 for f in ../out_*.log; do
   base=${f##*/}          # filename only
-  base=${base%.txt}
   base=${base%.log}
 
-  # Strip leading "out_" if present
+  # Strip leading "out_"
   stem="${base#out_}"
 
-  # Only keep phases we care about
+  # Keep only the 3 phases (allow extra tokens after phase, e.g. direct_train_lsc_...)
   if [[ ! "$stem" =~ ^(pretrain|finetune|direct_train)_ ]]; then
     continue
   fi

@@ -6,30 +6,38 @@ import os
 import re
 
 FNAME_RE = re.compile(
-    r"^loss_(pretrain|finetune|direct_train)_([A-Za-z0-9]+)_(\d+)(?:_(.*))?\.csv$"
+    r"^loss_(pretrain|finetune|direct_train)"
+    r"(?:_([A-Za-z0-9]+))?"
+    r"_(L|B)"
+    r"_(\d+)"
+    r"(?:_(.*))?\.csv$"
 )
 
 def parse_args():
-    p = argparse.ArgumentParser(description="Verify combined_losses.csv matches the original loss_*.csv files.")
+    p = argparse.ArgumentParser(description="Verify combined_losses.csv matches original loss_*.csv files.")
     p.add_argument("--pattern", default="loss_*.csv")
     p.add_argument("--combined", default="combined_losses.csv")
     return p.parse_args()
-
-def load_combined(path):
-    with open(path, newline="") as f:
-        reader = csv.DictReader(f)
-        rows = {int(r["Epoch"]): r for r in reader}
-        header = reader.fieldnames or []
-    return header, rows
 
 def filename_to_tag(name: str):
     m = FNAME_RE.match(name)
     if not m:
         return None
-    phase, variant, runid_str, extra = m.groups()
-    runid = int(runid_str)
-    extra = extra or ""
-    return f"{phase}_{variant}_{runid:02d}" + (f"_{extra}" if extra else "")
+    phase, prefix, variant, ns_str, rest = m.groups()
+    ns = int(ns_str)
+    rest = rest or ""
+    if prefix:
+        tag_base = f"{phase}_{prefix}_{variant}_{ns:02d}"
+    else:
+        tag_base = f"{phase}_{variant}_{ns:02d}"
+    return tag_base + (f"_{rest}" if rest else "")
+
+def load_combined(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        header = reader.fieldnames or []
+        rows = {int(r["Epoch"]): r for r in reader}
+    return header, rows
 
 def main():
     args = parse_args()
@@ -66,8 +74,8 @@ def main():
                 reader = csv.DictReader(f)
                 for row in reader:
                     epoch = int(row["Epoch"])
-                    train = row["TrainLoss"].strip()
-                    valid = row["ValidLoss"].strip()
+                    train = (row.get("TrainLoss") or "").strip()
+                    valid = (row.get("ValidLoss") or "").strip()
 
                     comb_row = combined_rows.get(epoch)
                     if comb_row is None:
