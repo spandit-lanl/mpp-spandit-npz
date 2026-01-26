@@ -78,7 +78,7 @@ finetune: &finetune
   accum_grad: 1
   pretrained: !!bool True
   group: 'debugging'
-  pretrained_ckpt_path: './dummy_path'
+  pretrained_ckpt_path: 'common/pretrain/pretrain_on-MPP_lr-X_opt-adan_wd-4_ns-14/training_checkpoints/ckpt.tar'
   train_data_paths: [
               ['/lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_fp16_full_finetune_train', 'lsc_npz', ''],
               ]
