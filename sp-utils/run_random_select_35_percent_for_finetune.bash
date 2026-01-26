@@ -1,23 +1,61 @@
 #!/bin/bash
 
-python random_select_lsc_finetune_data.py                  \
-    --input /lustre/scratch5/exempt/artimis/data/lsc240420_fp16_half \
-    --train_pct 35 \
-    --test_pct 10 \
-    --train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune_on_lsc/lsc240420_fp16_half_train_35_percent_lsc \
-    --test_out  /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune_on_lsc/lsc240420_fp16_half_test_10_percent_lsc
+echo -e "\nStarting with /lustre/scratch5/exempt/artimis/data/cx241203_fp16_full - 1\n"
+echo "--train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_fp16_full_finetune_train "
+echo "--test_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_fp16_full_finetune_test"
+python random_select_finetune_data.py --train_pct 35 --test_pct 20 \
+ --seed 62 \
+ --input /lustre/scratch5/exempt/artimis/data/cx241203_fp16_full \
+ --train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_fp16_full_finetune_train \
+ --test_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_fp16_full_finetune_test
+echo -e "\nDone with /lustre/scratch5/exempt/artimis/data/cx241203_fp16_full - 1\n"
 
-python random_select_lsc_finetune_data.py                  \
-    --input /lustre/scratch5/exempt/artimis/data/lsc240420_fp16_full \
-    --train_pct 35 \
-    --test_pct 10 \
-    --train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune_on_lsc/lsc240420_fp16_full_train_35_percent_lsc \
-    --test_out  /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune_on_lsc/lsc240420_fp16_full_test_10_percent_lsc
+echo -e "\nStarting with /lustre/scratch5/exempt/artimis/data/lsc240420_fp16_full - 1\n"
+echo "--train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_fp16_full_finetune_train "
+echo "--test_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_fp16_full_finetune_test"
+python random_select_finetune_data.py --train_pct 35 --test_pct 20 \
+ --seed 62 \
+ --input /lustre/scratch5/exempt/artimis/data/lsc240420_fp16_full \
+ --train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_fp16_full_finetune_train \
+ --test_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_fp16_full_finetune_test
+echo -e "\nDone with /lustre/scratch5/exempt/artimis/data/lsc240420_fp16_full - 1\n"
 
-python random_select_lsc_finetune_data.py                  \
-    --input /lustre/scratch5/exempt/artimis/data/lsc240420 \
-    --train_pct 35 \
-    --test_pct 10 \
-    --train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune_on_lsc/lsc240420_train_35_percent_lsc \
-    --test_out  /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune_on_lsc/lsc240420_test_10_percent_lsc
+echo -e "\nStarting with /lustre/scratch5/exempt/artimis/data/cx241203_fp16_half - 1\n"
+echo "--train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_fp16_half_finetune_train"
+echo "--test_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_fp16_half_finetune_test"
+python random_select_finetune_data.py --train_pct 35 --test_pct 20 \
+ --seed 52 \
+ --input /lustre/scratch5/exempt/artimis/data/cx241203_fp16_half \
+ --train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_fp16_half_finetune_train \
+ --test_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_fp16_half_finetune_test
+echo -e "\nDone with /lustre/scratch5/exempt/artimis/data/cx241203_fp16_half - 1\n"
 
+echo -e "\nStarting with /lustre/scratch5/exempt/artimis/data/lsc240420_fp16_half - 1\n"
+echo "--train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_fp16_half_finetune_train "
+echo "--test_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_fp16_half_finetune_test"
+python random_select_finetune_data.py --train_pct 35 --test_pct 20 \
+ --seed 52 \
+ --input /lustre/scratch5/exempt/artimis/data/lsc240420_fp16_half \
+ --train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_fp16_half_finetune_train \
+ --test_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_fp16_half_finetune_test
+echo -e "\nDone with /lustre/scratch5/exempt/artimis/data/lsc240420_fp16_half - 1\n"
+
+echo -e "\nStarting with /lustre/scratch5/exempt/artimis/data/cx241203 - 1\n"
+echo "--train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_finetune_train "
+echo "--test_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_finetune_test"
+python random_select_finetune_data.py --train_pct 35 --test_pct 20 \
+ --seed 72 \
+ --input /lustre/scratch5/exempt/artimis/data/cx241203 \
+ --train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_finetune_train \
+ --test_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_finetune_test
+echo -e "\nDone with /lustre/scratch5/exempt/artimis/data/cx241203 - 1\n"
+
+echo -e "\nStarting with /lustre/scratch5/exempt/artimis/data/lsc240420 - 1\n"
+echo "--train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_finetune_train "
+echo "--test_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_finetune_test"
+python random_select_finetune_data.py --train_pct 35 --test_pct 20 \
+ --seed 72 \
+ --input /lustre/scratch5/exempt/artimis/data/lsc240420 \
+ --train_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_finetune_train \
+ --test_out /lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_finetune_test
+echo -e "\nDone with /lustre/scratch5/exempt/artimis/data/lsc240420 - 1\n"
