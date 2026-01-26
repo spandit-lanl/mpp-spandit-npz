@@ -155,6 +155,7 @@ class Trainer:
                     decay = torch.optim.lr_scheduler.CosineAnnealingLR(self.optimizer, eta_min=params.learning_rate / 100, T_max=sched_epochs)
                     self.scheduler = torch.optim.lr_scheduler.SequentialLR(self.optimizer, [warmup, decay], [k], last_epoch=(params.epoch_size*self.startEpoch)-1)
                 else:
+                    # For finetune_resmue
                     # If warmup is finished, still create a cosine scheduler
                     self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
                         self.optimizer,
