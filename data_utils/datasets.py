@@ -143,10 +143,14 @@ class MixedDataset(Dataset):
             print(f"[SKIP] IndexError in MixedDataset at index={index}: {e}")
             # Return dummy tensors instead of raising
             # Replace 8 with num_fields
+            # CHANGE: use the dataset's actual number of fields (e.g., CLX can be 4 now, LSC can be 8)
+            num_fields = len(self.sub_dsets[file_idx].field_names)
+
             dummy_x = torch.zeros(
-                (self.sub_dsets[file_idx].n_steps, 8, 560, 192))
+                (self.sub_dsets[file_idx].n_steps, num_fields, 560, 192))
             dummy_bcs = torch.zeros(2)
-            dummy_y = torch.zeros((8, 560, 192))  # Replace 8 with num_fields
+            # CHANGE: match target tensor channels to num_fields as well
+            dummy_y = torch.zeros((num_fields, 560, 192))
             subset_tensor = torch.tensor(
                 self.subset_dict[self.sub_dsets[file_idx].get_name()])
             return dummy_x, file_idx, subset_tensor, dummy_bcs, dummy_y
