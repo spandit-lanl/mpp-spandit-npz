@@ -72,7 +72,7 @@ class ClxNpzDataset(Dataset):
         selected_fields = [
 			#"Wvelocity", "av_pressure", "av_temperature", "burn_frac_booster", "burn_frac_maincharge",
 			#"density_booster", "energy_booster", "pressure_maincharge",
-            "av_density", "Uvelocity", "Wvelociy", # "density_maincharge",
+            "av_density", "Uvelocity", "Wvelociy", "density_maincharge",
         ]
 
         def load_tensor(fpath):
