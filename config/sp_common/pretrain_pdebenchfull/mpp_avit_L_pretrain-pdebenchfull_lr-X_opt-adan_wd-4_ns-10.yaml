@@ -3,14 +3,14 @@ basic_config: &basic_config
   log_to_wandb: !!bool False # Use wandb integration
   log_to_screen: !!bool True # Log progress to screen.
   save_checkpoint: !!bool True # Save checkpoints
-  checkpoint_save_interval: 5 # Save every # epochs - also saves "best" according to val loss
+  checkpoint_save_interval: 10 # Save every # epochs - also saves "best" according to val loss
   debug_grad: !!bool True # Compute gradient/step_sizes/ect for debugging
   true_time: !!bool False # Debugging setting - sets num workers to zero and activates syncs
   num_data_workers: 6 # Generally pulling 8 cpu per process, so using 6 for DL - not sure if best ratio
   enable_amp: !!bool False # Use automatic mixed precision - blows up with low variance fields right now
   compile: !!bool False # Compile model - Does not currently work
   gradient_checkpointing: !!bool False # Whether to use gradient checkpointing - Slow, but lower memory
-  exp_dir: './common/pretrain' # Output path
+  exp_dir: './common/pretrain_pdebenchfull' # Output path
   log_interval: 1 # How often to log - Don't think this is actually implemented
   pretrained: !!bool False # Whether to load a pretrained model
   # wandb settings
@@ -32,7 +32,7 @@ basic_config: &basic_config
   n_states: 12   # Number of state variables across the datasets - Can be larger than real number and things will just go unused
   state_names: ['Pressure', 'Vx', 'Vy', 'Density',  'Vx', 'Vy', 'Density', 'Pressure'] # Should be sorted
   dt: 1 # Striding of data - Not currently implemented > 1
-  n_steps: 3 # Length of history to include in input
+  n_steps: 10 # Length of history to include in input
   enforce_max_steps: !!bool False # If false and n_steps > dataset steps, use dataset steps. Otherwise, raise Exception.
   accum_grad: 5  # Real batch size is accum * batch_size, real steps/"epoch" is epoch_size / accum
   # Model settings
@@ -78,17 +78,17 @@ finetune: &finetune
   accum_grad: 1
   pretrained: !!bool True
   group: 'debugging'
-  pretrained_ckpt_path: './dummy_path'
+  pretrained_ckpt_path: 'common/pretrain/pretrain_on-MPP_lr-X_opt-adan_wd-4_ns-10/training_checkpoints/ckpt.tar'
   train_data_paths: [
-              ['./dummy_path', 'dummy_dataset_name', ''],
+              ['/lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_fp16_full_finetune_train', 'clx_npz', ''],
               ]
   valid_data_paths: [  # These are the same for all configs - uses split according to train_val_test
-              ['./dummy_path', 'dummy_dataset_name', ''],
+              ['/lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/cx241203_fp16_full_finetune_train', 'clx_npz', ''],
               ]
   embedding_offset: 12 # Number of fields in original model - FT fields start after this
   freeze_middle: !!bool False # Whether to freeze the middle layers of the model
   freeze_processor: !!bool False
-  append_datasets: ['dummy_dataset_name'] # List of datasets to append to the input/output projections for finetuning
+  append_datasets: ['clx_npz'] # List of datasets to append to the input/output projections for finetuning
 
 
 finetune_resume: &finetune_resume
@@ -97,7 +97,7 @@ finetune_resume: &finetune_resume
   # Resume finetuning from the last finetune checkpoint (training_checkpoints/ckpt.tar) in the run directory.
   # IMPORTANT: use the SAME --run_name as the prior finetune run so ckpt.tar exists and resuming=True.
 
-  n_states: 20  # 12 (pretrain) + 8 (LSC appended fields) after expansion in the initial finetune run
+  n_states: 20  # 12 (pretrain) + 8 (CLX appended fields) after expansion in the initial finetune run
   pretrained: !!bool False  # prevent falling back to the 12-state pretrained_ckpt_path if ckpt.tar is missing
   append_datasets: []  # already expanded in the initial finetune run; avoid expanding twice on resume
 
