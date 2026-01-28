@@ -10,7 +10,7 @@ basic_config: &basic_config
   enable_amp: !!bool False # Use automatic mixed precision - blows up with low variance fields right now
   compile: !!bool False # Compile model - Does not currently work
   gradient_checkpointing: !!bool False # Whether to use gradient checkpointing - Slow, but lower memory
-  exp_dir: './common/finetune_lsc' # Output path
+  exp_dir: './final/finetune_lsc' # Output path
   log_interval: 1 # How often to log - Don't think this is actually implemented
   pretrained: !!bool False # Whether to load a pretrained model
   # wandb settings
@@ -78,7 +78,7 @@ finetune: &finetune
   accum_grad: 1
   pretrained: !!bool True
   group: 'debugging'
-  pretrained_ckpt_path: 'common/pretrain_pdebenchfull/pretrain_on-MPP_lr-X_opt-adan_wd-4_ns-04/training_checkpoints/ckpt.tar'
+  pretrained_ckpt_path: 'final/pretrain_pdebenchfull/pretrain_on-MPP_lr-X_opt-adan_wd-4_ns-04/training_checkpoints/ckpt.tar'
   train_data_paths: [
               ['/lustre/scratch5/exempt/artimis/mpmm/spandit/data/mpp_finetune/lsc240420_fp16_full_finetune_train', 'lsc_npz', ''],
               ]
