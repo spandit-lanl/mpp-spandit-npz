@@ -12,3 +12,7 @@ runs
 *RESULTS*
 common
 final
+*loss*.csv
+out*.log
+*grid*.pdf
+*grid*.png
